@@ -147,4 +147,4 @@ DEBUG = gdb
 EXTRALIBDIRS = $(RULESPATH)/ld
 
 dfu-util: $(BUILD_DIR)/$(TARGET).bin sizeafter
-	dfu-util -D $(BUILD_DIR)/$(TARGET).bin
+	dfu-util -S mk20dx256vlh7 -D $(BUILD_DIR)/$(TARGET).bin
