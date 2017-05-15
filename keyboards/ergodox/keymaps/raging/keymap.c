@@ -7,6 +7,8 @@
 #define FN 2 // function
 #define NUM 3 // numpad
 
+#define C_INIT M(10) // Init calculator
+
 #define _____ KC_TRNS
 #define XXXXX KC_NO
 
@@ -120,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	// Function layer
 	[FN] = KEYMAP(  // layer 2 : function
 		// left hand
-		_____,			KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,
+		RESET,			KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,
 		_____,			KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		_____,
 		_____,			KC_MPLY,	KC_MPRV,	KC_MNXT,	XXXXX,		XXXXX,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
@@ -130,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 															KC_DEL,		_____,		_____,
 
 		// right hand
-		KC_F7,			KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		XXXXX,
+		KC_F7,			KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		RESET,
 		XXXXX,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
 						KC_LEFT,	KC_DOWN,	KC_UP,		KC_RGHT,	XXXXX,		XXXXX,
 		XXXXX,			KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END,		XXXXX,		XXXXX,
@@ -165,7 +167,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		// left hand
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
-		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			XXXXX,		XXXXX,		XXXXX,		C_INIT,		XXXXX,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,
 																		_____,		_____,
@@ -173,7 +175,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 															_____,		_____,		_____,
 
 		// right hand
-		_____,			XXXXX,		KC_NLCK,	KC_PSLS,	KC_PAST,	KC_PMNS,	XXXXX,
+		_____,			XXXXX,		KC_NLCK,	KC_PSLS,	KC_PAST,	KC_PMNS,	C_INIT,
 		XXXXX,			XXXXX,		KC_P7,		KC_P8,		KC_P9,		KC_PPLS,	XXXXX,
 						XXXXX,		KC_P4,		KC_P5,		KC_P6,		KC_PPLS,	XXXXX,
 		XXXXX,			XXXXX,		KC_P1,		KC_P2,		KC_P3,		KC_ENT,		XXXXX,
@@ -192,11 +194,11 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
 	// MACRODOWN only works in this function
 	switch(id) {
-		case 0:
+		case 10:
 			if (record->event.pressed) {
-				register_code(KC_RSFT);
+				ergodox_right_increment();
+				ergodox_right_led_1_on();
 			} else {
-				unregister_code(KC_RSFT);
 			}
 			break;
 	}
@@ -211,23 +213,27 @@ void matrix_init_user(void) {
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
 
-	uint8_t layer = biton32(layer_state);
+	/* uint8_t layer = biton32(layer_state); */
 
-	ergodox_board_led_off();
-	ergodox_right_led_1_off();
-	ergodox_right_led_2_off();
-	ergodox_right_led_3_off();
-	switch (layer) {
-		// TODO: Make this relevant to the ErgoDox EZ.
-		case 1:
-			ergodox_right_led_1_on();
-			break;
-		case 2:
-			ergodox_right_led_2_on();
-			break;
-		default:
-			// none
-			break;
-	}
-
+	/* ergodox_board_led_off(); */
+	/* ergodox_right_led_1_off(); */
+	/* ergodox_right_led_2_off(); */
+	/* ergodox_right_led_3_off(); */
+	/* switch (layer) { */
+		/* // TODO: Make this relevant to the ErgoDox EZ. */
+		/* case 1: */
+			/* ergodox_right_led_1_on(); */
+			/* break; */
+		/* case 2: */
+			/* ergodox_right_led_1_on(); */
+			/* ergodox_right_led_2_on(); */
+			/* break; */
+		/* case 3: */
+			/* ergodox_right_led_3_on(); */
+			/* break; */
+		/* default: */
+			/* // none */
+			/* break; */
+	/* } */
 };
+

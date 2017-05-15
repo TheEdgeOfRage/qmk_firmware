@@ -7,6 +7,7 @@ void ergodox_board_led_on(void);
 void ergodox_right_led_1_on(void);
 void ergodox_right_led_2_on(void);
 void ergodox_right_led_3_on(void);
+void ergodox_right_increment(void);
 
 inline void ergodox_right_led_on(uint8_t led) {
     switch (led) {

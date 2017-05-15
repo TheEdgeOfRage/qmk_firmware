@@ -58,6 +58,7 @@ typedef struct {
     uint8_t led1;
     uint8_t led2;
     uint8_t led3;
+    char test[2];
 } visualizer_user_data_t;
 
 // Don't access from visualization function, use the visualizer state instead
@@ -66,6 +67,8 @@ static visualizer_user_data_t user_data_keyboard = {
     .led1 = LED_BRIGHTNESS_HI,
     .led2 = LED_BRIGHTNESS_HI,
     .led3 = LED_BRIGHTNESS_HI,
+    .test[0] = 'a',
+    .test[1] = 0,
 };
 
 _Static_assert(sizeof(visualizer_user_data_t) <= VISUALIZER_USER_DATA_SIZE,
@@ -99,18 +102,26 @@ static keyframe_animation_t two_led_colors = {
 
 // The LCD animation alternates between the layer name display and a
 // bitmap that displays all active layers
-static keyframe_animation_t lcd_bitmap_animation = {
+/* static keyframe_animation_t lcd_bitmap_animation = { */
+    /* .num_frames = 1, */
+    /* .loop = false, */
+    /* .frame_lengths = {gfxMillisecondsToTicks(0)}, */
+    /* .frame_functions = {lcd_keyframe_display_layer_bitmap}, */
+/* }; */
+
+/* static keyframe_animation_t lcd_bitmap_leds_animation = { */
+    /* .num_frames = 2, */
+    /* .loop = true, */
+    /* .frame_lengths = {gfxMillisecondsToTicks(2000), gfxMillisecondsToTicks(2000)}, */
+    /* .frame_functions = {lcd_keyframe_display_layer_bitmap, lcd_keyframe_display_led_states}, */
+/* }; */
+
+// Display test variable
+static keyframe_animation_t test_animation = {
     .num_frames = 1,
     .loop = false,
     .frame_lengths = {gfxMillisecondsToTicks(0)},
-    .frame_functions = {lcd_keyframe_display_layer_bitmap},
-};
-
-static keyframe_animation_t lcd_bitmap_leds_animation = {
-    .num_frames = 2,
-    .loop = true,
-    .frame_lengths = {gfxMillisecondsToTicks(2000), gfxMillisecondsToTicks(2000)},
-    .frame_functions = {lcd_keyframe_display_layer_bitmap, lcd_keyframe_display_led_states},
+    .frame_functions = {lcd_keyframe_display_layer_text},
 };
 
 void initialize_user_visualizer(visualizer_state_t* state) {
@@ -217,34 +228,34 @@ static void update_emulated_leds(visualizer_state_t* state, visualizer_keyboard_
     }
 }
 
-static void update_lcd_text(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) {
-    if (state->status.leds) {
-        if (lcd_state != LCD_STATE_BITMAP_AND_LEDS ||
-                state->status.leds != prev_status->leds ||
-                state->status.layer != prev_status->layer ||
-                state->status.default_layer != prev_status->default_layer) {
+/* static void update_lcd_text(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) { */
+    /* if (state->status.leds) { */
+        /* if (lcd_state != LCD_STATE_BITMAP_AND_LEDS || */
+                /* state->status.leds != prev_status->leds || */
+                /* state->status.layer != prev_status->layer || */
+                /* state->status.default_layer != prev_status->default_layer) { */
 
-            // NOTE: that it doesn't matter if the animation isn't playing, stop will do nothing in that case
-            stop_keyframe_animation(&lcd_bitmap_animation);
+            /* // NOTE: that it doesn't matter if the animation isn't playing, stop will do nothing in that case */
+            /* stop_keyframe_animation(&lcd_bitmap_animation); */
 
-            lcd_state = LCD_STATE_BITMAP_AND_LEDS;
-            // For information:
-            // The logic in this function makes sure that this doesn't happen, but if you call start on an
-            // animation that is already playing it will be restarted.
-            start_keyframe_animation(&lcd_bitmap_leds_animation);
-        }
-    } else {
-        if (lcd_state != LCD_STATE_LAYER_BITMAP ||
-                state->status.layer != prev_status->layer ||
-                state->status.default_layer != prev_status->default_layer) {
+            /* lcd_state = LCD_STATE_BITMAP_AND_LEDS; */
+            /* // For information: */
+            /* // The logic in this function makes sure that this doesn't happen, but if you call start on an */
+            /* // animation that is already playing it will be restarted. */
+            /* start_keyframe_animation(&lcd_bitmap_leds_animation); */
+        /* } */
+    /* } else { */
+        /* if (lcd_state != LCD_STATE_LAYER_BITMAP || */
+                /* state->status.layer != prev_status->layer || */
+                /* state->status.default_layer != prev_status->default_layer) { */
 
-            stop_keyframe_animation(&lcd_bitmap_leds_animation);
+            /* stop_keyframe_animation(&lcd_bitmap_leds_animation); */
 
-            lcd_state = LCD_STATE_LAYER_BITMAP;
-            start_keyframe_animation(&lcd_bitmap_animation);
-        }
-    }
-}
+            /* lcd_state = LCD_STATE_LAYER_BITMAP; */
+            /* start_keyframe_animation(&lcd_bitmap_animation); */
+        /* } */
+    /* } */
+/* } */
 
 void update_user_visualizer_state(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) {
     // Check the status here to start and stop animations
@@ -256,8 +267,10 @@ void update_user_visualizer_state(visualizer_state_t* state, visualizer_keyboard
     // status.
 
     update_emulated_leds(state, prev_status);
-    update_lcd_text(state, prev_status);
-
+    /* update_lcd_text(state, prev_status); */
+    /* stop_keyframe_animation(&default_startup_animation); */
+    state->layer_text = user_data_keyboard.test;
+    start_keyframe_animation(&test_animation);
 }
 
 void user_visualizer_suspend(visualizer_state_t* state) {
@@ -291,6 +304,11 @@ void ergodox_right_led_2_on(void){
 
 void ergodox_right_led_3_on(void){
     user_data_keyboard.led_on |= (1u << 2);
+    visualizer_set_user_data(&user_data_keyboard);
+}
+
+void ergodox_right_increment(void){
+    user_data_keyboard.test[0]++;
     visualizer_set_user_data(&user_data_keyboard);
 }
 
