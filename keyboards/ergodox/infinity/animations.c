@@ -39,7 +39,7 @@
 keyframe_animation_t default_startup_animation = {
     .num_frames = 4,
     .loop = false,
-    .frame_lengths = {0, 0, 0, gfxMillisecondsToTicks(5000), 0},
+    .frame_lengths = {0, 0, 0, gfxMillisecondsToTicks(1000), 0},
     .frame_functions = {
             lcd_keyframe_enable,
             backlight_keyframe_enable,

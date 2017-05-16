@@ -33,6 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "system/serial_link.h"
 #include "animations.h"
 
+#define STACK_SIZE 10
+
 static const uint32_t logo_background_color = LCD_COLOR(0x00, 0x00, 0xFF);
 static const uint32_t initial_color = LCD_COLOR(0, 0, 0);
 
@@ -52,13 +54,15 @@ typedef enum {
 } lcd_state_t;
 
 static lcd_state_t lcd_state = LCD_STATE_INITIAL;
+static double local_stack[STACK_SIZE];
 
 typedef struct {
     uint8_t led_on;
     uint8_t led1;
     uint8_t led2;
     uint8_t led3;
-    char test[2];
+    uint8_t sp;
+    double stack[2];
 } visualizer_user_data_t;
 
 // Don't access from visualization function, use the visualizer state instead
@@ -67,8 +71,8 @@ static visualizer_user_data_t user_data_keyboard = {
     .led1 = LED_BRIGHTNESS_HI,
     .led2 = LED_BRIGHTNESS_HI,
     .led3 = LED_BRIGHTNESS_HI,
-    .test[0] = 'a',
-    .test[1] = 0,
+    .sp = 0,
+    .stack = {0},
 };
 
 _Static_assert(sizeof(visualizer_user_data_t) <= VISUALIZER_USER_DATA_SIZE,
@@ -116,12 +120,12 @@ static keyframe_animation_t two_led_colors = {
     /* .frame_functions = {lcd_keyframe_display_layer_bitmap, lcd_keyframe_display_led_states}, */
 /* }; */
 
-// Display test variable
-static keyframe_animation_t test_animation = {
+// Display rpn stack
+static keyframe_animation_t stack_animation = {
     .num_frames = 1,
     .loop = false,
     .frame_lengths = {gfxMillisecondsToTicks(0)},
-    .frame_functions = {lcd_keyframe_display_layer_text},
+    .frame_functions = {lcd_keyframe_display_rpn_stack},
 };
 
 void initialize_user_visualizer(visualizer_state_t* state) {
@@ -182,8 +186,8 @@ static uint8_t get_brightness(visualizer_user_data_t* user_data, uint8_t index) 
 }
 
 static void update_emulated_leds(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) {
-    visualizer_user_data_t* user_data_new = (visualizer_user_data_t*)state->status.user_data;
-    visualizer_user_data_t* user_data_old = (visualizer_user_data_t*)prev_status->user_data;
+    visualizer_user_data_t* user_data_new = (visualizer_user_data_t*)&state->status.user_data;
+    visualizer_user_data_t* user_data_old = (visualizer_user_data_t*)&prev_status->user_data;
 
     uint8_t new_index;
     uint8_t old_index;
@@ -258,19 +262,11 @@ static void update_emulated_leds(visualizer_state_t* state, visualizer_keyboard_
 /* } */
 
 void update_user_visualizer_state(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) {
-    // Check the status here to start and stop animations
-    // You might have to save some state, like the current animation here so that you can start the right
-    // This function is called every time the status changes
-
-    // NOTE that this is called from the visualizer thread, so don't access anything else outside the status
-    // This is also important because the slave won't have access to the active layer for example outside the
-    // status.
-
     update_emulated_leds(state, prev_status);
-    /* update_lcd_text(state, prev_status); */
-    /* stop_keyframe_animation(&default_startup_animation); */
-    state->layer_text = user_data_keyboard.test;
-    start_keyframe_animation(&test_animation);
+    state->status.user_data.sp = user_data_keyboard.sp;
+    state->status.user_data.stack[0] = user_data_keyboard.stack[user_data_keyboard.sp];
+    state->status.user_data.stack[1] = user_data_keyboard.stack[user_data_keyboard.sp+1];
+    start_keyframe_animation(&stack_animation);
 }
 
 void user_visualizer_suspend(visualizer_state_t* state) {
@@ -307,8 +303,18 @@ void ergodox_right_led_3_on(void){
     visualizer_set_user_data(&user_data_keyboard);
 }
 
-void ergodox_right_increment(void){
-    user_data_keyboard.test[0]++;
+void ergodox_right_init_calc(void){
+    for(int i = 0; i < STACK_SIZE; ++i) {
+        local_stack[i] = 0;
+    }
+    user_data_keyboard.stack[0] = 0;
+    user_data_keyboard.stack[1] = 0;
+    user_data_keyboard.sp = 0;
+    visualizer_set_user_data(&user_data_keyboard);
+}
+
+void ergodox_right_add_number(uint8_t n){
+    user_data_keyboard.stack[user_data_keyboard.sp] = user_data_keyboard.stack[user_data_keyboard.sp] * 10 + n;
     visualizer_set_user_data(&user_data_keyboard);
 }
 

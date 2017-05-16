@@ -62,7 +62,13 @@ static visualizer_keyboard_status_t current_status = {
     .leds = 0xFFFFFFFF,
     .suspended = false,
 #ifdef VISUALIZER_USER_DATA_SIZE
-    .user_data = {0}
+    .user_data.led_on = 0,
+    .user_data.led1 = 0,
+    .user_data.led2 = 0,
+    .user_data.led3 = 0,
+    .user_data.sp = 0,
+    .user_data.stack[0] = 0,
+    .user_data.stack[1] = 0,
 #endif
 };
 
@@ -73,7 +79,7 @@ static bool same_status(visualizer_keyboard_status_t* status1, visualizer_keyboa
         status1->leds == status2->leds &&
         status1->suspended == status2->suspended
 #ifdef VISUALIZER_USER_DATA_SIZE
-        && memcmp(status1->user_data, status2->user_data, VISUALIZER_USER_DATA_SIZE) == 0
+        && memcmp(&status1->user_data, &status2->user_data, VISUALIZER_USER_DATA_SIZE) == 0
 #endif
     ;
 }
@@ -246,7 +252,13 @@ static DECLARE_THREAD_FUNCTION(visualizerThread, arg) {
         .leds = 0xFFFFFFFF,
         .suspended = false,
 #ifdef VISUALIZER_USER_DATA_SIZE
-        .user_data = {0},
+        .user_data.led_on = 0,
+        .user_data.led1 = 0,
+        .user_data.led2 = 0,
+        .user_data.led3 = 0,
+        .user_data.sp = 0,
+        .user_data.stack[0] = 0,
+        .user_data.stack[1] = 0,
 #endif
     };
 
@@ -409,13 +421,13 @@ uint8_t visualizer_get_mods() {
   if (!has_oneshot_mods_timed_out()) {
     mods |= get_oneshot_mods();
   }
-#endif  
+#endif
   return mods;
 }
 
 #ifdef VISUALIZER_USER_DATA_SIZE
 void visualizer_set_user_data(void* u) {
-    memcpy(user_data, u, VISUALIZER_USER_DATA_SIZE);
+    memcpy(&user_data, u, VISUALIZER_USER_DATA_SIZE);
 }
 #endif
 
@@ -448,7 +460,7 @@ void visualizer_update(uint32_t default_state, uint32_t state, uint8_t mods, uin
             .suspended = current_status.suspended,
         };
 #ifdef VISUALIZER_USER_DATA_SIZE
-       memcpy(new_status.user_data, user_data, VISUALIZER_USER_DATA_SIZE);
+       memcpy(&new_status.user_data, user_data, VISUALIZER_USER_DATA_SIZE);
 #endif
         if (!same_status(&current_status, &new_status)) {
             changed = true;

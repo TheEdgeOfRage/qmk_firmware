@@ -54,7 +54,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // The visualizer needs gfx thread priorities
 #define VISUALIZER_THREAD_PRIORITY (NORMAL_PRIORITY - 2)
 
-#define VISUALIZER_USER_DATA_SIZE 16
+#define VISUALIZER_USER_DATA_SIZE 24
 
 /*
  * Feature disable options

@@ -63,13 +63,22 @@ void draw_emulator(void);
 struct keyframe_animation_t;
 
 typedef struct {
+    uint8_t led_on;
+    uint8_t led1;
+    uint8_t led2;
+    uint8_t led3;
+    uint8_t sp;
+    double stack[2];
+} visualizer_keyboad_user_data_t;
+
+typedef struct {
     uint32_t layer;
     uint32_t default_layer;
     uint8_t mods;
     uint32_t leds; // See led.h for available statuses
     bool suspended;
 #ifdef VISUALIZER_USER_DATA_SIZE
-    uint8_t user_data[VISUALIZER_USER_DATA_SIZE];
+    visualizer_keyboad_user_data_t user_data;
 #endif
 } visualizer_keyboard_status_t;
 

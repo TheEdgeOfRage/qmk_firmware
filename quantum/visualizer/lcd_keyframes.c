@@ -186,3 +186,45 @@ bool lcd_keyframe_enable(keyframe_animation_t* animation, visualizer_state_t* st
     gdispSetPowerMode(powerOn);
     return false;
 }
+
+static void format_double_bitmap_string(double n, char* buffer) {
+    uint64_t i = (int)(n * 1000);
+    uint8_t digits = 0;
+    char tmp, *save = buffer;
+
+    // Extract digits from double into string, empty if number is 0
+    while (i != 0) {
+        if(digits == 3) {
+            *buffer = '.';
+            ++buffer;
+        }
+        *buffer = (i % 10) + '0';
+        ++buffer;
+        ++digits;
+        i /= 10;
+    }
+    *buffer = 0;
+    --buffer;
+
+    // Reverse number string
+    while (save < buffer) {
+        tmp = *buffer;
+        *buffer = *save;
+        *save = tmp;
+        --buffer;
+        ++save;
+    }
+}
+
+bool lcd_keyframe_display_rpn_stack(keyframe_animation_t* animation, visualizer_state_t* state) {
+    (void)animation;
+    char stack_buffer[20];
+    gdispClear(White);
+    gdispDrawString(0, 0, "Stack", state->font_fixed5x8, Black);
+    format_double_bitmap_string(state->status.user_data.stack[0], stack_buffer);
+    gdispDrawString(0, 10, stack_buffer, state->font_fixed5x8, Black);
+    format_double_bitmap_string(state->status.user_data.stack[1], stack_buffer);
+    gdispDrawString(0, 20, stack_buffer, state->font_fixed5x8, Black);
+    return false;
+}
+

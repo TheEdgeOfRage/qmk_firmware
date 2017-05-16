@@ -6,14 +6,25 @@
 #define QWER 1 // qwerty layout
 #define FN 2 // function
 #define NUM 3 // numpad
+#define RPN 4 // numpad
 
+#define C_0 M(0) // Add number 0
+#define C_1 M(1) // Add number 1
+#define C_2 M(2) // Add number 2
+#define C_3 M(3) // Add number 3
+#define C_4 M(4) // Add number 4
+#define C_5 M(5) // Add number 5
+#define C_6 M(6) // Add number 6
+#define C_7 M(7) // Add number 7
+#define C_8 M(8) // Add number 8
+#define C_9 M(9) // Add number 9
 #define C_INIT M(10) // Init calculator
 
 #define _____ KC_TRNS
 #define XXXXX KC_NO
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-	/* Keymap 0: Basic layer
+	/* Keymap 1: Basic layer
 	 *
 	 * ,--------------------------------------------------.           ,--------------------------------------------------.
 	 * |   `    |   1  |   2  |   3  |   4  |   5  |   =  |           |  NUM |   6  |   7  |   8  |   9  |   0  |   -    |
@@ -40,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TAB,			KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,
 		KC_LCTL,		KC_A,		KC_R,		KC_S,		KC_T,		KC_D,
 		KC_LSFT,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_RPRN,
-		XXXXX,			XXXXX,		XXXXX,		XXXXX,		KC_LGUI,
+		TG(NUM),		MO(FN),		XXXXX,		XXXXX,		KC_LGUI,
 																		KC_ESC,		KC_ESC,
 																					KC_SLCK,
 															KC_SPC,		KC_LALT,	KC_CAPS,
@@ -51,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 						KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
 		KC_RBRC,		KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
 									KC_SLSH,	XXXXX,		XXXXX,		XXXXX,		XXXXX,
-		XXXXX,			XXXXX,
+		TG(RPN),		XXXXX,
 		TG(QWER),
 		KC_PSCR,		MO(FN),		KC_BSPC
 			),
@@ -126,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_____,			KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		_____,
 		_____,			KC_MPLY,	KC_MPRV,	KC_MNXT,	XXXXX,		XXXXX,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
-		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			_____,		XXXXX,		XXXXX,		XXXXX,
 																		_____,		_____,
 																					_____,
 															KC_DEL,		_____,		_____,
@@ -162,26 +173,46 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 *                                 |      |      |      |       |      |      |      |
 	 *                                 `--------------------'       `--------------------'
 	 */
-	// Function layer
-	[NUM] = KEYMAP(  // layer 2 : function
+	[NUM] = KEYMAP(  // layer 3 : numpad
 		// left hand
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
-		_____,			XXXXX,		XXXXX,		XXXXX,		C_INIT,		XXXXX,
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
-		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			_____,		XXXXX,		XXXXX,		XXXXX,
 																		_____,		_____,
 																					_____,
 															_____,		_____,		_____,
 
 		// right hand
-		_____,			XXXXX,		KC_NLCK,	KC_PSLS,	KC_PAST,	KC_PMNS,	C_INIT,
+		_____,			XXXXX,		KC_NLCK,	KC_PSLS,	KC_PAST,	KC_PMNS,	XXXXX,
 		XXXXX,			XXXXX,		KC_P7,		KC_P8,		KC_P9,		KC_PPLS,	XXXXX,
 						XXXXX,		KC_P4,		KC_P5,		KC_P6,		KC_PPLS,	XXXXX,
 		XXXXX,			XXXXX,		KC_P1,		KC_P2,		KC_P3,		KC_ENT,		XXXXX,
 									KC_P0,		KC_P0,		KC_PDOT,	KC_ENT,		XXXXX,
 		XXXXX,			XXXXX,
 		XXXXX,
+		_____,			_____,		_____
+	),
+	[RPN] = KEYMAP(  // layer 4 : RPN calculator
+		// left hand
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
+		_____,			_____,		XXXXX,		XXXXX,		XXXXX,
+																		_____,		_____,
+																					_____,
+															_____,		_____,		_____,
+
+		// right hand
+		_____,			XXXXX,		C_INIT,		KC_PSLS,	KC_PAST,	KC_PMNS,	XXXXX,
+		XXXXX,			XXXXX,		C_7,		C_8,		C_9,		KC_PPLS,	XXXXX,
+						XXXXX,		C_4,		C_5,		C_6,		KC_PPLS,	XXXXX,
+		XXXXX,			XXXXX,		C_1,		C_2,		C_3,		KC_ENT,		XXXXX,
+									C_0,		C_0,		KC_PDOT,	KC_ENT,		XXXXX,
+		_____,			_____,
+		_____,
 		_____,			_____,		_____
 	),
 };
@@ -194,12 +225,49 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
 	// MACRODOWN only works in this function
 	switch(id) {
+		case 0:
+			if (record->event.pressed)
+				ergodox_right_add_number(0);
+			break;
+		case 1:
+			if (record->event.pressed)
+				ergodox_right_add_number(1);
+			break;
+		case 2:
+			if (record->event.pressed)
+				ergodox_right_add_number(2);
+			break;
+		case 3:
+			if (record->event.pressed)
+				ergodox_right_add_number(3);
+			break;
+		case 4:
+			if (record->event.pressed)
+				ergodox_right_add_number(4);
+			break;
+		case 5:
+			if (record->event.pressed)
+				ergodox_right_add_number(5);
+			break;
+		case 6:
+			if (record->event.pressed)
+				ergodox_right_add_number(6);
+			break;
+		case 7:
+			if (record->event.pressed)
+				ergodox_right_add_number(7);
+			break;
+		case 8:
+			if (record->event.pressed)
+				ergodox_right_add_number(8);
+			break;
+		case 9:
+			if (record->event.pressed)
+				ergodox_right_add_number(9);
+			break;
 		case 10:
-			if (record->event.pressed) {
-				ergodox_right_increment();
-				ergodox_right_led_1_on();
-			} else {
-			}
+			if (record->event.pressed)
+				ergodox_right_init_calc();
 			break;
 	}
 	return MACRO_NONE;
@@ -207,33 +275,30 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-
+	/* ergodox_right_init_calc(); */
 };
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
+	uint8_t layer = biton32(layer_state);
 
-	/* uint8_t layer = biton32(layer_state); */
-
-	/* ergodox_board_led_off(); */
-	/* ergodox_right_led_1_off(); */
-	/* ergodox_right_led_2_off(); */
-	/* ergodox_right_led_3_off(); */
-	/* switch (layer) { */
-		/* // TODO: Make this relevant to the ErgoDox EZ. */
-		/* case 1: */
-			/* ergodox_right_led_1_on(); */
-			/* break; */
-		/* case 2: */
-			/* ergodox_right_led_1_on(); */
-			/* ergodox_right_led_2_on(); */
-			/* break; */
-		/* case 3: */
-			/* ergodox_right_led_3_on(); */
-			/* break; */
-		/* default: */
-			/* // none */
-			/* break; */
-	/* } */
+	ergodox_board_led_off();
+	ergodox_right_led_1_off();
+	ergodox_right_led_2_off();
+	ergodox_right_led_3_off();
+	switch (layer) {
+		case 1:
+			ergodox_right_led_1_on();
+			break;
+		case 2:
+			ergodox_right_led_2_on();
+			break;
+		case 3:
+			ergodox_right_led_3_on();
+			break;
+		default:
+			// none
+			break;
+	}
 };
 
