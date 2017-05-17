@@ -16,6 +16,7 @@
 
 #include "lcd_keyframes.h"
 #include <string.h>
+#include <math.h>
 #include "action_util.h"
 #include "led.h"
 #include "resources/resources.h"
@@ -187,44 +188,111 @@ bool lcd_keyframe_enable(keyframe_animation_t* animation, visualizer_state_t* st
     return false;
 }
 
-static void format_double_bitmap_string(double n, char* buffer) {
-    uint64_t i = (int)(n * 1000);
-    uint8_t digits = 0;
-    char tmp, *save = buffer;
+/* static void format_double_bitmap_string(double n, char* buffer) { */
+    /* uint64_t i = (int)(n * 100); */
+    /* uint8_t digits = 0; */
+    /* char tmp, *save = buffer; */
 
-    // Extract digits from double into string, empty if number is 0
-    while (i != 0) {
-        if(digits == 3) {
-            *buffer = '.';
-            ++buffer;
-        }
-        *buffer = (i % 10) + '0';
-        ++buffer;
-        ++digits;
-        i /= 10;
+    /* // Extract digits from double into string, empty if number is 0 */
+    /* while (i != 0) { */
+        /* if(digits == 2) { */
+            /* *buffer = '.'; */
+            /* ++buffer; */
+        /* } */
+        /* *buffer = (i % 10) + '0'; */
+        /* ++buffer; */
+        /* ++digits; */
+        /* i /= 10; */
+    /* }; */
+    /* if (digits == 2) { */
+        /* *buffer = '.'; */
+        /* ++buffer; */
+        /* *buffer = '0'; */
+        /* ++buffer; */
+    /* } */
+    /* *buffer = 0; */
+    /* --buffer; */
+
+    /* // Reverse number string */
+    /* while (save < buffer) { */
+        /* tmp = *buffer; */
+        /* *buffer = *save; */
+        /* *save = tmp; */
+        /* --buffer; */
+        /* ++save; */
+    /* } */
+/* } */
+
+int n_tu(int number, int count) {
+    int result=1;
+    while(count-- > 0)
+        result *= number;
+
+    return result;
+}
+
+/***Convert double to string***/
+void double_to_string(double f, char r[]) {
+    long long int length, length2, i, number, position, sign;
+    double number2;
+
+    sign = -1;   // -1 == positive number
+    if (f < 0) {
+        sign = '-';
+        f *= -1;
     }
-    *buffer = 0;
-    --buffer;
 
-    // Reverse number string
-    while (save < buffer) {
-        tmp = *buffer;
-        *buffer = *save;
-        *save = tmp;
-        --buffer;
-        ++save;
+    number2 = f;
+    number = f;
+    length = 0;  // size of decimal part
+    length2 = 0; //  size of tenth
+
+    /* calculate length2 tenth part*/
+    while ((number2 - (double)number) != 0.0 && !((number2 - (double)number) < 0.0)) {
+         number2 = f * (n_tu(10.0, length2 + 1));
+         number = number2;
+         length2++;
+    }
+
+    /* calculate length decimal part*/
+    for(length = (f > 1) ? 0 : 1; f > 1; length++)
+        f /= 10;
+
+    position = length;
+    length = length + 1 + length2;
+    number = number2;
+    if(sign == '-') {
+        length++;
+        position++;
+    }
+
+    for(i = length; i >= 0 ; i--) {
+        if(i == (length))
+            r[i] = '\0';
+        else if(i == (position))
+            r[i] = '.';
+        else if(sign == '-' && i == 0)
+            r[i] = '-';
+        else {
+            r[i] = (number % 10) + '0';
+            number /=10;
+        }
     }
 }
 
 bool lcd_keyframe_display_rpn_stack(keyframe_animation_t* animation, visualizer_state_t* state) {
     (void)animation;
-    char stack_buffer[20];
+    char stack_buffer[24];
     gdispClear(White);
-    gdispDrawString(0, 0, "Stack", state->font_fixed5x8, Black);
-    format_double_bitmap_string(state->status.user_data.stack[0], stack_buffer);
-    gdispDrawString(0, 10, stack_buffer, state->font_fixed5x8, Black);
-    format_double_bitmap_string(state->status.user_data.stack[1], stack_buffer);
-    gdispDrawString(0, 20, stack_buffer, state->font_fixed5x8, Black);
+    double_to_string(state->status.user_data.stack[0], stack_buffer);
+    gdispDrawString(0, 2, "Z: ", state->font_fixed5x8, Black);
+    gdispDrawString(15, 2, stack_buffer, state->font_fixed5x8, Black);
+    double_to_string(state->status.user_data.stack[1], stack_buffer);
+    gdispDrawString(0, 12, "Y: ", state->font_fixed5x8, Black);
+    gdispDrawString(15, 12, stack_buffer, state->font_fixed5x8, Black);
+    double_to_string(state->status.user_data.buffer, stack_buffer);
+    gdispDrawString(0, 22, "X: ", state->font_fixed5x8, Black);
+    gdispDrawString(15, 22, stack_buffer, state->font_fixed5x8, Black);
     return false;
 }
 

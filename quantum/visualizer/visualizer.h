@@ -68,6 +68,7 @@ typedef struct {
     uint8_t led2;
     uint8_t led3;
     uint8_t sp;
+    double buffer;
     double stack[2];
 } visualizer_keyboad_user_data_t;
 

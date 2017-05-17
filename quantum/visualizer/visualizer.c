@@ -67,6 +67,7 @@ static visualizer_keyboard_status_t current_status = {
     .user_data.led2 = 0,
     .user_data.led3 = 0,
     .user_data.sp = 0,
+    .user_data.buffer = 0,
     .user_data.stack[0] = 0,
     .user_data.stack[1] = 0,
 #endif
@@ -257,6 +258,7 @@ static DECLARE_THREAD_FUNCTION(visualizerThread, arg) {
         .user_data.led2 = 0,
         .user_data.led3 = 0,
         .user_data.sp = 0,
+        .user_data.buffer = 0,
         .user_data.stack[0] = 0,
         .user_data.stack[1] = 0,
 #endif

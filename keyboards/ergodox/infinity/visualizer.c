@@ -55,6 +55,9 @@ typedef enum {
 
 static lcd_state_t lcd_state = LCD_STATE_INITIAL;
 static double local_stack[STACK_SIZE];
+static bool buffer_old = false;
+static bool buffer_preserve = false;
+static uint8_t exponent = 0;
 
 typedef struct {
     uint8_t led_on;
@@ -62,6 +65,7 @@ typedef struct {
     uint8_t led2;
     uint8_t led3;
     uint8_t sp;
+    double buffer;
     double stack[2];
 } visualizer_user_data_t;
 
@@ -72,6 +76,7 @@ static visualizer_user_data_t user_data_keyboard = {
     .led2 = LED_BRIGHTNESS_HI,
     .led3 = LED_BRIGHTNESS_HI,
     .sp = 0,
+    .buffer = 0,
     .stack = {0},
 };
 
@@ -264,8 +269,18 @@ static void update_emulated_leds(visualizer_state_t* state, visualizer_keyboard_
 void update_user_visualizer_state(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) {
     update_emulated_leds(state, prev_status);
     state->status.user_data.sp = user_data_keyboard.sp;
-    state->status.user_data.stack[0] = user_data_keyboard.stack[user_data_keyboard.sp];
-    state->status.user_data.stack[1] = user_data_keyboard.stack[user_data_keyboard.sp+1];
+    state->status.user_data.buffer = user_data_keyboard.buffer;
+    if (user_data_keyboard.sp > 1) {
+        state->status.user_data.stack[0] = local_stack[user_data_keyboard.sp - 2];
+        state->status.user_data.stack[1] = local_stack[user_data_keyboard.sp - 1];
+        /* user_data_keyboard.stack[0] = local_stack[user_data_keyboard.sp - 2]; */
+        /* user_data_keyboard.stack[1] = local_stack[user_data_keyboard.sp - 1]; */
+    } else {
+        state->status.user_data.stack[0] = 0;
+        state->status.user_data.stack[1] = local_stack[0];
+        /* user_data_keyboard.stack[0] = 0; */
+        /* user_data_keyboard.stack[1] = local_stack[0]; */
+    }
     start_keyframe_animation(&stack_animation);
 }
 
@@ -284,55 +299,36 @@ void user_visualizer_resume(visualizer_state_t* state) {
     start_keyframe_animation(&default_startup_animation);
 }
 
-void ergodox_board_led_on(void){
+void ergodox_board_led_on(void) {
     // No board led support
 }
 
-void ergodox_right_led_1_on(void){
+void ergodox_right_led_1_on(void) {
     user_data_keyboard.led_on |= (1u << 0);
     visualizer_set_user_data(&user_data_keyboard);
 }
 
-void ergodox_right_led_2_on(void){
+void ergodox_right_led_2_on(void) {
     user_data_keyboard.led_on |= (1u << 1);
     visualizer_set_user_data(&user_data_keyboard);
 }
 
-void ergodox_right_led_3_on(void){
+void ergodox_right_led_3_on(void) {
     user_data_keyboard.led_on |= (1u << 2);
     visualizer_set_user_data(&user_data_keyboard);
 }
 
-void ergodox_right_init_calc(void){
-    for(int i = 0; i < STACK_SIZE; ++i) {
-        local_stack[i] = 0;
-    }
-    user_data_keyboard.stack[0] = 0;
-    user_data_keyboard.stack[1] = 0;
-    user_data_keyboard.sp = 0;
-    visualizer_set_user_data(&user_data_keyboard);
-}
-
-void ergodox_right_add_number(uint8_t n){
-    user_data_keyboard.stack[user_data_keyboard.sp] = user_data_keyboard.stack[user_data_keyboard.sp] * 10 + n;
-    visualizer_set_user_data(&user_data_keyboard);
-}
-
-void ergodox_board_led_off(void){
-    // No board led support
-}
-
-void ergodox_right_led_1_off(void){
+void ergodox_right_led_1_off(void) {
     user_data_keyboard.led_on &= ~(1u << 0);
     visualizer_set_user_data(&user_data_keyboard);
 }
 
-void ergodox_right_led_2_off(void){
+void ergodox_right_led_2_off(void) {
     user_data_keyboard.led_on &= ~(1u << 1);
     visualizer_set_user_data(&user_data_keyboard);
 }
 
-void ergodox_right_led_3_off(void){
+void ergodox_right_led_3_off(void) {
     user_data_keyboard.led_on &= ~(1u << 2);
     visualizer_set_user_data(&user_data_keyboard);
 }
@@ -351,3 +347,132 @@ void ergodox_right_led_3_set(uint8_t n) {
     user_data_keyboard.led3 = n;
     visualizer_set_user_data(&user_data_keyboard);
 }
+
+void ergodox_board_led_off(void) {
+    // No board led support
+}
+
+// RPN calculator functions
+void ergodox_calc_init(void) {
+    buffer_old = false;
+    buffer_preserve = false;
+    exponent = 0;
+    for(uint8_t i = 0; i < STACK_SIZE; ++i) {
+        local_stack[i] = 0;
+    }
+    user_data_keyboard.sp = 0;
+    user_data_keyboard.buffer = 0;
+    user_data_keyboard.stack[0] = 0;
+    user_data_keyboard.stack[1] = 0;
+    visualizer_set_user_data(&user_data_keyboard);
+}
+
+void update_stack(void) {
+    if (user_data_keyboard.sp > 1) {
+        user_data_keyboard.stack[0] = local_stack[user_data_keyboard.sp - 2];
+        user_data_keyboard.stack[1] = local_stack[user_data_keyboard.sp - 1];
+    } else {
+        user_data_keyboard.stack[0] = 0;
+        user_data_keyboard.stack[1] = local_stack[0];
+    }
+    visualizer_set_user_data(&user_data_keyboard);
+}
+
+void pop_stack(void) {
+    --user_data_keyboard.sp;
+    if (user_data_keyboard.sp == 0) {
+        local_stack[0] = 0;
+    }
+    update_stack();
+}
+
+void ergodox_calc_push(void) {
+    if (user_data_keyboard.sp == STACK_SIZE) {
+        ergodox_right_led_1_on();
+        return;
+    }
+    local_stack[user_data_keyboard.sp] = user_data_keyboard.buffer;
+    ++user_data_keyboard.sp;
+    update_stack();
+    buffer_old = true;
+    exponent = 0;
+}
+
+void ergodox_calc_pop(void) {
+    if (user_data_keyboard.sp == 0) {
+        user_data_keyboard.buffer = 0;
+    } else {
+        user_data_keyboard.buffer = local_stack[user_data_keyboard.sp - 1];
+        pop_stack();
+        buffer_old = true;
+        buffer_preserve = true;
+    }
+    visualizer_set_user_data(&user_data_keyboard);
+}
+
+double expon(int count) {
+    double result=1;
+    while(count-- > 0)
+        result /= 10.0;
+
+    return result;
+}
+
+void ergodox_calc_append_number(uint8_t n) {
+    if (buffer_preserve) {
+        ergodox_calc_push();
+        buffer_preserve = false;
+    }
+    if (buffer_old) {
+        if (exponent != 0) {
+            user_data_keyboard.buffer = n * expon(exponent);
+            ++exponent;
+        } else {
+            user_data_keyboard.buffer = n;
+        }
+        buffer_old = false;
+    } else {
+        if (exponent != 0) {
+            user_data_keyboard.buffer = user_data_keyboard.buffer + n * expon(exponent);
+            ++exponent;
+        }
+        else {
+            user_data_keyboard.buffer = user_data_keyboard.buffer * 10 + n;
+        }
+    }
+    update_stack();
+}
+
+void ergodox_calc_dot(void) {
+    if (exponent == 0)
+        exponent = 1;
+}
+
+void ergodox_calc_add(void) {
+    user_data_keyboard.buffer += local_stack[user_data_keyboard.sp - 1];
+    pop_stack();
+    buffer_old = true;
+    buffer_preserve = true;
+}
+
+void ergodox_calc_sub(void) {
+    user_data_keyboard.buffer = local_stack[user_data_keyboard.sp - 1] - user_data_keyboard.buffer;
+    pop_stack();
+    buffer_old = true;
+    buffer_preserve = true;
+}
+
+void ergodox_calc_mul(void) {
+    user_data_keyboard.buffer *= local_stack[user_data_keyboard.sp - 1];
+    pop_stack();
+    buffer_old = true;
+    buffer_preserve = true;
+}
+
+void ergodox_calc_div(void) {
+    user_data_keyboard.buffer = local_stack[user_data_keyboard.sp - 1] / user_data_keyboard.buffer;
+    pop_stack();
+    buffer_old = true;
+    buffer_preserve = true;
+}
+

@@ -7,8 +7,6 @@ void ergodox_board_led_on(void);
 void ergodox_right_led_1_on(void);
 void ergodox_right_led_2_on(void);
 void ergodox_right_led_3_on(void);
-void ergodox_right_init_calc(void);
-void ergodox_right_add_number(uint8_t n);
 
 inline void ergodox_right_led_on(uint8_t led) {
     switch (led) {
@@ -81,6 +79,17 @@ inline void ergodox_led_all_set(uint8_t n) {
     ergodox_right_led_2_set(n);
     ergodox_right_led_3_set(n);
 }
+
+// Calculator functions
+void ergodox_calc_init(void);
+void ergodox_calc_append_number(uint8_t n);
+void ergodox_calc_push(void);
+void ergodox_calc_pop(void);
+void ergodox_calc_dot(void);
+void ergodox_calc_add(void);
+void ergodox_calc_sub(void);
+void ergodox_calc_mul(void);
+void ergodox_calc_div(void);
 
 #define KEYMAP( \
     A80, A70, A60, A50, A40, A30, A20,  \

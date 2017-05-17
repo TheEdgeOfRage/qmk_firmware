@@ -8,17 +8,24 @@
 #define NUM 3 // numpad
 #define RPN 4 // numpad
 
-#define C_0 M(0) // Add number 0
-#define C_1 M(1) // Add number 1
-#define C_2 M(2) // Add number 2
-#define C_3 M(3) // Add number 3
-#define C_4 M(4) // Add number 4
-#define C_5 M(5) // Add number 5
-#define C_6 M(6) // Add number 6
-#define C_7 M(7) // Add number 7
-#define C_8 M(8) // Add number 8
-#define C_9 M(9) // Add number 9
-#define C_INIT M(10) // Init calculator
+#define C_INIT M(10) // Reset calculator to zero
+#define C_0 M(0) // Append number 0 to buffer
+#define C_1 M(1) // Append number 1 to buffer
+#define C_2 M(2) // Append number 2 to buffer
+#define C_3 M(3) // Append number 3 to buffer
+#define C_4 M(4) // Append number 4 to buffer
+#define C_5 M(5) // Append number 5 to buffer
+#define C_6 M(6) // Append number 6 to buffer
+#define C_7 M(7) // Append number 7 to buffer
+#define C_8 M(8) // Append number 8 to buffer
+#define C_9 M(9) // Append number 9 to buffer
+#define C_DOT M(11) // Add decimal point
+#define C_PUSH M(12) // Push buffer to stack
+#define C_POP M(13) // Pop stack to buffer
+#define C_ADD M(14) // Add buffer and stack
+#define C_SUB M(15) // Subtract buffer from stack
+#define C_MUL M(16) // Multiply buffer and stack
+#define C_DIV M(17) // Divide stack and buffer
 
 #define _____ KC_TRNS
 #define XXXXX KC_NO
@@ -206,14 +213,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 															_____,		_____,		_____,
 
 		// right hand
-		_____,			XXXXX,		C_INIT,		KC_PSLS,	KC_PAST,	KC_PMNS,	XXXXX,
-		XXXXX,			XXXXX,		C_7,		C_8,		C_9,		KC_PPLS,	XXXXX,
-						XXXXX,		C_4,		C_5,		C_6,		KC_PPLS,	XXXXX,
-		XXXXX,			XXXXX,		C_1,		C_2,		C_3,		KC_ENT,		XXXXX,
-									C_0,		C_0,		KC_PDOT,	KC_ENT,		XXXXX,
+		_____,			XXXXX,		C_INIT,		C_DIV,		C_MUL,		C_SUB,	XXXXX,
+		XXXXX,			XXXXX,		C_7,		C_8,		C_9,		C_ADD,	XXXXX,
+						XXXXX,		C_4,		C_5,		C_6,		C_ADD,	XXXXX,
+		XXXXX,			XXXXX,		C_1,		C_2,		C_3,		C_PUSH,		XXXXX,
+									C_0,		C_0,		C_DOT,		C_PUSH,		XXXXX,
 		_____,			_____,
 		_____,
-		_____,			_____,		_____
+		_____,			_____,		C_POP
 	),
 };
 
@@ -227,47 +234,75 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 	switch(id) {
 		case 0:
 			if (record->event.pressed)
-				ergodox_right_add_number(0);
+				ergodox_calc_append_number(0);
 			break;
 		case 1:
 			if (record->event.pressed)
-				ergodox_right_add_number(1);
+				ergodox_calc_append_number(1);
 			break;
 		case 2:
 			if (record->event.pressed)
-				ergodox_right_add_number(2);
+				ergodox_calc_append_number(2);
 			break;
 		case 3:
 			if (record->event.pressed)
-				ergodox_right_add_number(3);
+				ergodox_calc_append_number(3);
 			break;
 		case 4:
 			if (record->event.pressed)
-				ergodox_right_add_number(4);
+				ergodox_calc_append_number(4);
 			break;
 		case 5:
 			if (record->event.pressed)
-				ergodox_right_add_number(5);
+				ergodox_calc_append_number(5);
 			break;
 		case 6:
 			if (record->event.pressed)
-				ergodox_right_add_number(6);
+				ergodox_calc_append_number(6);
 			break;
 		case 7:
 			if (record->event.pressed)
-				ergodox_right_add_number(7);
+				ergodox_calc_append_number(7);
 			break;
 		case 8:
 			if (record->event.pressed)
-				ergodox_right_add_number(8);
+				ergodox_calc_append_number(8);
 			break;
 		case 9:
 			if (record->event.pressed)
-				ergodox_right_add_number(9);
+				ergodox_calc_append_number(9);
 			break;
 		case 10:
 			if (record->event.pressed)
-				ergodox_right_init_calc();
+				ergodox_calc_init();
+			break;
+		case 11:
+			if (record->event.pressed)
+				ergodox_calc_dot();
+			break;
+		case 12:
+			if (record->event.pressed)
+				ergodox_calc_push();
+			break;
+		case 13:
+			if (record->event.pressed)
+				ergodox_calc_pop();
+			break;
+		case 14:
+			if (record->event.pressed)
+				ergodox_calc_add();
+			break;
+		case 15:
+			if (record->event.pressed)
+				ergodox_calc_sub();
+			break;
+		case 16:
+			if (record->event.pressed)
+				ergodox_calc_mul();
+			break;
+		case 17:
+			if (record->event.pressed)
+				ergodox_calc_div();
 			break;
 	}
 	return MACRO_NONE;
@@ -275,7 +310,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-	/* ergodox_right_init_calc(); */
+	/* ergodox_calc_init(); */
 };
 
 // Runs constantly in the background, in a loop.
@@ -283,6 +318,7 @@ void matrix_scan_user(void) {
 	uint8_t layer = biton32(layer_state);
 
 	ergodox_board_led_off();
+	/* ergodox_led_all_on(); */
 	ergodox_right_led_1_off();
 	ergodox_right_led_2_off();
 	ergodox_right_led_3_off();
