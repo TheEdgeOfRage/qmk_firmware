@@ -142,7 +142,7 @@ void initialize_user_visualizer(visualizer_state_t* state) {
     state->current_lcd_color = initial_color;
     state->target_lcd_color = logo_background_color;
     lcd_state = LCD_STATE_INITIAL;
-    /* start_keyframe_animation(&default_startup_animation); */
+    start_keyframe_animation(&default_startup_animation);
 }
 
 inline bool is_led_on(visualizer_user_data_t* user_data, uint8_t num) {
