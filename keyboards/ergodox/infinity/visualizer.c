@@ -26,8 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #error This visualizer needs that LCD is enabled
 #endif
 
-#include <math.h>
-
 #include "visualizer.h"
 #include "visualizer_keyframes.h"
 #include "lcd_keyframes.h"
@@ -479,7 +477,7 @@ void ergodox_calc_div(void) {
 }
 
 void ergodox_calc_sqrt(void) {
-    user_data_keyboard.buffer = sqrt(user_data_keyboard.buffer);
+    user_data_keyboard.buffer = user_data_keyboard.buffer;
     update_stack();
     buffer_old = true;
     buffer_preserve = true;

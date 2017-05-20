@@ -250,15 +250,15 @@ bool lcd_keyframe_display_rpn_stack(keyframe_animation_t* animation, visualizer_
 
     format_double_bitmap_string(state->status.user_data.stack[0], stack_buffer);
     gdispDrawString(0, 2, "Z: ", state->font_fixed5x8, Black);
-    /* gdispDrawString(15, 2, stack_buffer, state->font_fixed5x8, Black); */
+    gdispDrawString(15, 2, stack_buffer, state->font_fixed5x8, Black);
 
-    /* format_double_bitmap_string(state->status.user_data.stack[1], stack_buffer); */
+    format_double_bitmap_string(state->status.user_data.stack[1], stack_buffer);
     gdispDrawString(0, 12, "Y: ", state->font_fixed5x8, Black);
-    /* gdispDrawString(15, 12, stack_buffer, state->font_fixed5x8, Black); */
+    gdispDrawString(15, 12, stack_buffer, state->font_fixed5x8, Black);
 
-    /* format_double_bitmap_string(state->status.user_data.buffer, stack_buffer); */
+    format_double_bitmap_string(state->status.user_data.buffer, stack_buffer);
     gdispDrawString(0, 22, "X: ", state->font_fixed5x8, Black);
-    /* gdispDrawString(15, 22, stack_buffer, state->font_fixed5x8, Black); */
+    gdispDrawString(15, 22, stack_buffer, state->font_fixed5x8, Black);
     return false;
 }
 
