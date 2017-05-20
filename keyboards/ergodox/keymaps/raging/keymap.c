@@ -151,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 		// right hand
 		KC_F7,			KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		RESET,
-		XXXXX,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		XXXXX,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		DEBUG,
 						KC_LEFT,	KC_DOWN,	KC_UP,		KC_RGHT,	XXXXX,		XXXXX,
 		XXXXX,			KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END,		XXXXX,		XXXXX,
 									XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
@@ -330,6 +330,11 @@ void matrix_scan_user(void) {
 			ergodox_right_led_2_on();
 			break;
 		case 3:
+			ergodox_right_led_3_on();
+			break;
+		case 4:
+			ergodox_right_led_1_on();
+			ergodox_right_led_2_on();
 			ergodox_right_led_3_on();
 			break;
 		default:

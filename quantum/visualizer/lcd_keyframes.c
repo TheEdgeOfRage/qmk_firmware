@@ -110,24 +110,24 @@ static void get_led_state_string(char* output, visualizer_state_t* state) {
     uint8_t pos = 0;
 
     if (state->status.leds & (1u << USB_LED_NUM_LOCK)) {
-       memcpy(output + pos, "NUM ", 4);
-       pos += 4;
+        memcpy(output + pos, "NUM ", 4);
+        pos += 4;
     }
     if (state->status.leds & (1u << USB_LED_CAPS_LOCK)) {
-       memcpy(output + pos, "CAPS ", 5);
-       pos += 5;
+        memcpy(output + pos, "CAPS ", 5);
+        pos += 5;
     }
     if (state->status.leds & (1u << USB_LED_SCROLL_LOCK)) {
-       memcpy(output + pos, "SCRL ", 5);
-       pos += 5;
+        memcpy(output + pos, "SCRL ", 5);
+        pos += 5;
     }
     if (state->status.leds & (1u << USB_LED_COMPOSE)) {
-       memcpy(output + pos, "COMP ", 5);
-       pos += 5;
+        memcpy(output + pos, "COMP ", 5);
+        pos += 5;
     }
     if (state->status.leds & (1u << USB_LED_KANA)) {
-       memcpy(output + pos, "KANA", 4);
-       pos += 4;
+        memcpy(output + pos, "KANA", 4);
+        pos += 4;
     }
     output[pos] = 0;
 }
@@ -189,33 +189,53 @@ bool lcd_keyframe_enable(keyframe_animation_t* animation, visualizer_state_t* st
 }
 
 /* static void format_double_bitmap_string(double n, char* buffer) { */
-    /* uint64_t i = (int)(n * 100); */
-    /* uint8_t digits = 0; */
-    /* char tmp, *save = buffer; */
+    /* char *save = buffer; // Save pointer to the beginning of the string */
+    /* bool neg = (n < 0); */
+    /* if (neg) { // If number is negative, make it positive */
+        /* n *= -1; */
+    /* } */
 
-    /* // Extract digits from double into string, empty if number is 0 */
-    /* while (i != 0) { */
-        /* if(digits == 2) { */
-            /* *buffer = '.'; */
-            /* ++buffer; */
-        /* } */
-        /* *buffer = (i % 10) + '0'; */
+    /* uint64_t i = roundf(n * 10000); // Round to a maximum of 4 decimal places */
+    /* uint64_t f = i % 10000; // Save frraction to separate variable */
+    /* bool frac = f != 0; // Save if the fraction was 0 */
+    /* i /= 10000; */
+
+    /* while ((f % 10) == 0) { // Skip trailing zeros in fraction */
+        /* f /= 10; */
+    /* } */
+    /* while (f != 0) { // Loop through fraction and add digits to the buffer */
+        /* *buffer = (f % 10) + '0'; */
         /* ++buffer; */
-        /* ++digits; */
-        /* i /= 10; */
-    /* }; */
-    /* if (digits == 2) { */
+        /* f /= 10; */
+    /* } */
+    /* if (frac && i == 0) { // Add '.0' if the integer is 0 */
         /* *buffer = '.'; */
         /* ++buffer; */
         /* *buffer = '0'; */
+        /* ++buffer; */
+    /* } else if (frac) { // Add decimal point if the integer is not 0 */
+        /* *buffer = '.'; */
+        /* ++buffer; */
+    /* } else if (i == 0) { // If the fraction and integer are 0 write a 0 to the buffer and return */
+        /* *buffer = '0'; */
+        /* ++buffer; */
+        /* *buffer = 0; */
+        /* return; */
+    /* } */
+    /* while (i != 0) { // Loop through the integer and add digits to the buffer */
+        /* *buffer = (i % 10) + '0'; */
+        /* ++buffer; */
+        /* i /= 10; */
+    /* } */
+    /* if (neg) { // If the number was negative add a '-' */
+        /* *buffer = '-'; */
         /* ++buffer; */
     /* } */
     /* *buffer = 0; */
     /* --buffer; */
 
-    /* // Reverse number string */
-    /* while (save < buffer) { */
-        /* tmp = *buffer; */
+    /* while (save < buffer) { // Reverse number string */
+        /* char tmp = *buffer; */
         /* *buffer = *save; */
         /* *save = tmp; */
         /* --buffer; */
@@ -223,76 +243,22 @@ bool lcd_keyframe_enable(keyframe_animation_t* animation, visualizer_state_t* st
     /* } */
 /* } */
 
-int n_tu(int number, int count) {
-    int result=1;
-    while(count-- > 0)
-        result *= number;
-
-    return result;
-}
-
-/***Convert double to string***/
-void double_to_string(double f, char r[]) {
-    long long int length, length2, i, number, position, sign;
-    double number2;
-
-    sign = -1;   // -1 == positive number
-    if (f < 0) {
-        sign = '-';
-        f *= -1;
-    }
-
-    number2 = f;
-    number = f;
-    length = 0;  // size of decimal part
-    length2 = 0; //  size of tenth
-
-    /* calculate length2 tenth part*/
-    while ((number2 - (double)number) != 0.0 && !((number2 - (double)number) < 0.0)) {
-         number2 = f * (n_tu(10.0, length2 + 1));
-         number = number2;
-         length2++;
-    }
-
-    /* calculate length decimal part*/
-    for(length = (f > 1) ? 0 : 1; f > 1; length++)
-        f /= 10;
-
-    position = length;
-    length = length + 1 + length2;
-    number = number2;
-    if(sign == '-') {
-        length++;
-        position++;
-    }
-
-    for(i = length; i >= 0 ; i--) {
-        if(i == (length))
-            r[i] = '\0';
-        else if(i == (position))
-            r[i] = '.';
-        else if(sign == '-' && i == 0)
-            r[i] = '-';
-        else {
-            r[i] = (number % 10) + '0';
-            number /=10;
-        }
-    }
-}
-
 bool lcd_keyframe_display_rpn_stack(keyframe_animation_t* animation, visualizer_state_t* state) {
     (void)animation;
-    char stack_buffer[24];
+    /* char stack_buffer[32]; */
     gdispClear(White);
-    double_to_string(state->status.user_data.stack[0], stack_buffer);
+
+    /* format_double_bitmap_string(state->status.user_data.stack[0], stack_buffer); */
     gdispDrawString(0, 2, "Z: ", state->font_fixed5x8, Black);
-    gdispDrawString(15, 2, stack_buffer, state->font_fixed5x8, Black);
-    double_to_string(state->status.user_data.stack[1], stack_buffer);
+    /* gdispDrawString(15, 2, stack_buffer, state->font_fixed5x8, Black); */
+
+    /* format_double_bitmap_string(state->status.user_data.stack[1], stack_buffer); */
     gdispDrawString(0, 12, "Y: ", state->font_fixed5x8, Black);
-    gdispDrawString(15, 12, stack_buffer, state->font_fixed5x8, Black);
-    double_to_string(state->status.user_data.buffer, stack_buffer);
+    /* gdispDrawString(15, 12, stack_buffer, state->font_fixed5x8, Black); */
+
+    /* format_double_bitmap_string(state->status.user_data.buffer, stack_buffer); */
     gdispDrawString(0, 22, "X: ", state->font_fixed5x8, Black);
-    gdispDrawString(15, 22, stack_buffer, state->font_fixed5x8, Black);
+    /* gdispDrawString(15, 22, stack_buffer, state->font_fixed5x8, Black); */
     return false;
 }
 

@@ -26,6 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #error This visualizer needs that LCD is enabled
 #endif
 
+#include <math.h>
+
 #include "visualizer.h"
 #include "visualizer_keyframes.h"
 #include "lcd_keyframes.h"
@@ -140,7 +142,7 @@ void initialize_user_visualizer(visualizer_state_t* state) {
     state->current_lcd_color = initial_color;
     state->target_lcd_color = logo_background_color;
     lcd_state = LCD_STATE_INITIAL;
-    start_keyframe_animation(&default_startup_animation);
+    /* start_keyframe_animation(&default_startup_animation); */
 }
 
 inline bool is_led_on(visualizer_user_data_t* user_data, uint8_t num) {
@@ -476,3 +478,9 @@ void ergodox_calc_div(void) {
     buffer_preserve = true;
 }
 
+void ergodox_calc_sqrt(void) {
+    user_data_keyboard.buffer = sqrt(user_data_keyboard.buffer);
+    update_stack();
+    buffer_old = true;
+    buffer_preserve = true;
+}

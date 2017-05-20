@@ -90,6 +90,7 @@ void ergodox_calc_add(void);
 void ergodox_calc_sub(void);
 void ergodox_calc_mul(void);
 void ergodox_calc_div(void);
+void ergodox_calc_sqrt(void);
 
 #define KEYMAP( \
     A80, A70, A60, A50, A40, A30, A20,  \
