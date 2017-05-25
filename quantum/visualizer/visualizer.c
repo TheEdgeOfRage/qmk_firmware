@@ -267,6 +267,7 @@ static DECLARE_THREAD_FUNCTION(visualizerThread, arg) {
         .current_lcd_color = 0,
 #ifdef LCD_ENABLE
         .font_fixed5x8 = gdispOpenFont("fixed_5x8"),
+        .font_fixed7x14 = gdispOpenFont("fixed_7x14"),
         .font_dejavusansbold12 = gdispOpenFont("DejaVuSansBold12")
 #endif
     };
