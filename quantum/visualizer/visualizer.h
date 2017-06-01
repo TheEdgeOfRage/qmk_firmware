@@ -98,6 +98,7 @@ typedef struct visualizer_state_t {
     uint32_t prev_lcd_color;
 #ifdef LCD_ENABLE
     font_t font_fixed5x8;
+    font_t font_fixed7x14;
     font_t font_dejavusansbold12;
 #endif
 } visualizer_state_t;
