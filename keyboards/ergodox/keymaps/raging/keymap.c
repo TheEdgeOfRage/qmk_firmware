@@ -30,7 +30,6 @@
 #define _____ KC_TRNS
 #define XXXXX KC_NO
 
-const uint16_t max = 5000;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	/* Keymap 1: Basic layer
 	 *
