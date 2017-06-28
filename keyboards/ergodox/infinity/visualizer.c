@@ -274,6 +274,9 @@ void initialize_user_visualizer(visualizer_state_t* state) {
         /* } */
     /* } */
 /* } */
+static inline bool is_led_on(visualizer_user_data_t* user_data, uint8_t num) {
+    return user_data->led_on & (1u << num);
+}
 
 void update_user_visualizer_state(visualizer_state_t* state, visualizer_keyboard_status_t* prev_status) {
     state->target_lcd_color = LCD_COLOR(0, 0, 0xFF);
