@@ -34,4 +34,4 @@ QMK is developed and maintained by Jack Humbert of OLKB with contributions from 
 
 This fork has an RPN calculator for the Infinity ergodox in the source code. I changed a lot of the original visualizer code, so I will not be attemting to merge with upstream until I have cleaned it up. You can check out the keyboards/ergodox/keymaps/raging keymap to see how to map the calculator commands.
 
-![Showcase](https://i.imgur.com/9lggi1t.jpg)
+![Showcase](https://i.imgur.com/EkKYY8F.jpg)
