@@ -87,10 +87,10 @@ _Static_assert(sizeof(visualizer_user_data_t) <= VISUALIZER_USER_DATA_SIZE,
 
 // The color animation animates the LCD color when you change layers
 /* static keyframe_animation_t one_led_color = { */
-    /* .num_frames = 1, */
-    /* .loop = false, */
-    /* .frame_lengths = {gfxMillisecondsToTicks(0)}, */
-    /* .frame_functions = {lcd_backlight_keyframe_set_color}, */
+	/* .num_frames = 1, */
+	/* .loop = false, */
+	/* .frame_lengths = {gfxMillisecondsToTicks(0)}, */
+	/* .frame_functions = {lcd_backlight_keyframe_set_color}, */
 /* }; */
 
 bool swap_led_target_color(keyframe_animation_t* animation, visualizer_state_t* state) {
@@ -125,13 +125,13 @@ bool swap_led_target_color(keyframe_animation_t* animation, visualizer_state_t* 
 /* }; */
 
 static keyframe_animation_t color_animation = {
-    .num_frames = 2,
-    .loop = false,
-    // Note that there's a 200 ms no-operation frame,
-    // this prevents the color from changing when activating the layer
-    // momentarily
-    .frame_lengths = {gfxMillisecondsToTicks(200), gfxMillisecondsToTicks(500)},
-    .frame_functions = {keyframe_no_operation, backlight_keyframe_animate_color},
+	.num_frames = 2,
+	.loop = false,
+    /* // Note that there's a 200 ms no-operation frame, */
+    /* // this prevents the color from changing when activating the layer */
+    /* // momentarily */
+	.frame_lengths = {gfxMillisecondsToTicks(200), gfxMillisecondsToTicks(500)},
+	.frame_functions = {keyframe_no_operation, lcd_backlight_keyframe_animate_color},
 };
 
 // Display rpn stack
