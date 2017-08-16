@@ -1,6 +1,6 @@
 #include "ergodox.h"
-#include "debug.h"
-#include "action_layer.h"
+/* #include "debug.h" */
+/* #include "action_layer.h" */
 
 #define BASE 0 // default layer
 #define QWER 1 // qwerty layout
@@ -31,10 +31,10 @@
 #define XXXXX KC_NO
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-	/* Keymap 1: Basic layer
+	/* Keymap 0: Base Colemak layer
 	 *
 	 * ,--------------------------------------------------.           ,--------------------------------------------------.
-	 * |   `    |   1  |   2  |   3  |   4  |   5  |   =  |           |  NUM |   6  |   7  |   8  |   9  |   0  |   -    |
+	 * |   `    |   1  |   2  |   3  |   4  |   5  |   =  |           |   =  |   6  |   7  |   8  |   9  |   0  |   -    |
 	 * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
 	 * | Del    |   Q  |   W  |   F  |   P  |   G  |   (  |           |   [  |   J  |   L  |   U  |   Y  |   ;  |   '    |
 	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -42,41 +42,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * |--------+------+------+------+------+------|   )  |           |   ]  |------+------+------+------+------+--------|
 	 * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   K  |   M  |   ,  |   .  |   \  | RShift |
 	 * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-	 *   |      |      |      |      | LGUI |                                       |   /  |      |      |      |      |
+	 *   |  FN  |      |      |      | LGUI |                                       |   /  |      |      |      |      |
 	 *   `----------------------------------'                                       `----------------------------------'
-	 *                                        ,-------------.       ,--------------.
-	 *                                        |      |      |       |      |       |
-	 *                                 ,------|------|------|       |------+-------+------.
-	 *                                 |      |      | Slck |       | QWER |       |      |
-	 *                                 | Space| LAlt |------|       |------|   FN  | Enter|
-	 *                                 |      |      | Caps |       | Pscr |       |      |
-	 *                                 `--------------------'       `---------------------'
+	 *                                        ,-------------.       ,-------------.
+	 *                                        |  Esc | SLck |       |  RPN |  NUM |
+	 *                                 ,------|------|------|       |------+------+------.
+	 *                                 |      |      | QWER |       | QWER |      |      |
+	 *                                 | Space| LAlt |------|       |------|  FN  | Enter|
+	 *                                 |      |      | Caps |       | PScr |      |      |
+	 *                                 `--------------------'       `--------------------'
 	 */
-	[BASE] = KEYMAP(  // layer 0 : default
+	[BASE] = KEYMAP(
 		// left hand
 		KC_GRV,			KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_EQL,
 		KC_TAB,			KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,
 		KC_LCTL,		KC_A,		KC_R,		KC_S,		KC_T,		KC_D,
 		KC_LSFT,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_RPRN,
-		TG(FN),			XXXXX,		XXXXX,		XXXXX,		KC_LGUI,
-																		KC_ESC,		TG(QWER),
-																					KC_SLCK,
+		MO(FN),			XXXXX,		XXXXX,		XXXXX,		KC_LGUI,
+																		KC_ESC,		KC_SLCK,
+																					TG(QWER),
 															KC_SPC,		KC_LALT,	KC_CAPS,
 
 		// right hand
-		TG(NUM),		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,
+		KC_EQL,			KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,
 		KC_LBRC,		KC_J,		KC_L,		KC_U,		KC_Y,		KC_SCLN,	KC_QUOT,
 						KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
 		KC_RBRC,		KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
 									KC_SLSH,	XXXXX,		XXXXX,		XXXXX,		XXXXX,
-		TG(RPN),		XXXXX,
+		TG(RPN),		TG(NUM),
 		TG(QWER),
 		KC_PSCR,		MO(FN),		KC_BSPC
-			),
-	/* Keymap 0: Basic layer
+	),
+
+	/* Keymap 1: QWERTY Layer
 	 *
 	 * ,--------------------------------------------------.           ,--------------------------------------------------.
-	 * |   `    |   1  |   2  |   3  |   4  |   5  |   =  |           |  NUM |   6  |   7  |   8  |   9  |   0  |   -    |
+	 * |   `    |   1  |   2  |   3  |   4  |   5  |   =  |           |   =  |   6  |   7  |   8  |   9  |   0  |   -    |
 	 * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
 	 * | Del    |   Q  |   W  |   E  |   R  |   T  |   (  |           |   [  |   Y  |   U  |   I  |   O  |   P  |   '    |
 	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -84,18 +85,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * |--------+------+------+------+------+------|   )  |           |   ]  |------+------+------+------+------+--------|
 	 * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |   \  | RShift |
 	 * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-	 *   |      |      |      |      | LGUI |                                       |   /  |      |      |      |      |
+	 *   |  FN  |      |      |      | LGUI |                                       |   /  |      |      |      |      |
 	 *   `----------------------------------'                                       `----------------------------------'
-	 *                                        ,-------------.       ,--------------.
-	 *                                        |      |      |       |      |       |
-	 *                                 ,------|------|------|       |------+-------+------.
-	 *                                 |      |      | Slck |       | QWER |       |      |
-	 *                                 | Space| LAlt |------|       |------|   FN  | Enter|
-	 *                                 |      |      | Caps |       | Pscr |       |      |
-	 *                                 `--------------------'       `---------------------'
+	 *                                        ,-------------.       ,-------------.
+	 *                                        |  Esc | SLck |       |  RPN |  NUM |
+	 *                                 ,------|------|------|       |------+------+------.
+	 *                                 |      |      | QWER |       | QWER |      |      |
+	 *                                 | Space| LAlt |------|       |------|  FN  | Enter|
+	 *                                 |      |      | Caps |       | Pscr |      |      |
+	 *                                 `--------------------'       `--------------------'
 	 */
-	// QWERTY layer
-	[QWER] = KEYMAP(  // layer 1 : qwerty
+	[QWER] = KEYMAP(
 		// left hand
 		_____,			_____,		_____,		_____,		_____,		_____,		_____,
 		_____,			KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		_____,
@@ -116,6 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_____,
 		_____,			_____,		_____
 	),
+
 	/* Keymap 2: Function Layer
 	 *
 	 * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -137,8 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 *                                 |      |      |      |       |      |      |      |
 	 *                                 `--------------------'       `--------------------'
 	 */
-	// Function layer
-	[FN] = KEYMAP(  // layer 2 : function
+	[FN] = KEYMAP(
 		// left hand
 		RESET,			KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,
 		_____,			KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		_____,
@@ -159,6 +159,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		XXXXX,
 		_____,			_____,		_____
 	),
+
 	/* Keymap 3: Numpad Layer
 	 *
 	 * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -201,6 +202,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		XXXXX,
 		_____,			_____,		_____
 	),
+
+	/* Keymap 4: RPN calculator layer
+	 *
+	 * ,--------------------------------------------------.           ,--------------------------------------------------.
+	 * |        |      |      |      |      |      |      |           |      |      | Init |   /  |   *  |   -  |        |
+	 * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+	 * |        |      |      |      |      |      |      |           |      |      |   7  |   8  |   9  |   +  |        |
+	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+	 * |        |      |      |      |      |      |------|           |------|      |   4  |   5  |   6  |   +  |        |
+	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+	 * |        |      |      |      |      |      |      |           |      |      |   1  |   2  |   3  |  Ent |        |
+	 * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+	 *   |      |      |      |      |      |                                       |   0  |   0  |   .  |  Ent |      |
+	 *   `----------------------------------'                                       `----------------------------------'
+	 *                                        ,-------------.       ,-------------.
+	 *                                        |      |      |       |      |      |
+	 *                                 ,------|------|------|       |------+------+------.
+	 *                                 |      |      |      |       |      |      |      |
+	 *                                 |      |      |------|       |------|      | Drop |
+	 *                                 |      |      |      |       |      |      |      |
+	 *                                 `--------------------'       `--------------------'
+	 */
 	[RPN] = KEYMAP(  // layer 4 : RPN calculator
 		// left hand
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
@@ -213,9 +236,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 															_____,		_____,		_____,
 
 		// right hand
-		_____,			XXXXX,		C_INIT,		C_DIV,		C_MUL,		C_SUB,	XXXXX,
-		XXXXX,			XXXXX,		C_7,		C_8,		C_9,		C_ADD,	XXXXX,
-						XXXXX,		C_4,		C_5,		C_6,		C_ADD,	XXXXX,
+		_____,			XXXXX,		C_INIT,		C_DIV,		C_MUL,		C_SUB,		XXXXX,
+		XXXXX,			XXXXX,		C_7,		C_8,		C_9,		C_ADD,		XXXXX,
+						XXXXX,		C_4,		C_5,		C_6,		C_ADD,		XXXXX,
 		XXXXX,			XXXXX,		C_1,		C_2,		C_3,		C_PUSH,		XXXXX,
 									C_0,		C_0,		C_DOT,		C_PUSH,		XXXXX,
 		_____,			_____,
@@ -315,22 +338,22 @@ void matrix_init_user(void) {
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
-	uint8_t layer = biton32(layer_state);
+	/* uint8_t layer = biton32(layer_state); */
 
-	switch (layer) {
-		case 0:
-			/* ergodox_led_all_on(); */
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		default:
-			// none
-			break;
-	}
+	/* switch (layer) { */
+		/* case 0: */
+			/* [> ergodox_led_all_on(); <] */
+		/* case 1: */
+			/* break; */
+		/* case 2: */
+			/* break; */
+		/* case 3: */
+			/* break; */
+		/* case 4: */
+			/* break; */
+		/* default: */
+			/* // none */
+			/* break; */
+	/* } */
 };
 
