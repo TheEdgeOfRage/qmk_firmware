@@ -52,7 +52,8 @@ SOFTWARE.
 
 // Define this in config.h
 #ifndef VISUALIZER_THREAD_PRIORITY
-#define "Visualizer thread priority not defined"
+// The visualizer needs gfx thread priorities
+#define VISUALIZER_THREAD_PRIORITY (NORMAL_PRIORITY - 2)
 #endif
 
 static visualizer_keyboard_status_t current_status = {
@@ -261,21 +262,18 @@ static DECLARE_THREAD_FUNCTION(visualizerThread, arg) {
         .mods = 0xFF,
         .leds = 0xFFFFFFFF,
         .suspended = false,
-/* <<<<<<< HEAD */
-#ifdef VISUALIZER_USER_DATA_SIZE
-        .user_data.led_on = 0,
-        .user_data.led1 = 0,
-        .user_data.led2 = 0,
-        .user_data.led3 = 0,
-        .user_data.buffer = 0,
-        .user_data.stack[0] = 0,
-        .user_data.stack[1] = 0,
-#endif
-/* ======= */
-    /* #ifdef VISUALIZER_USER_DATA_SIZE */
-        /* .user_data = {0}, */
-    /* #endif */
-/* >>>>>>> master */
+        #ifdef VISUALIZER_USER_DATA_SIZE
+            .user_data.led_on = 0,
+            .user_data.led1 = 0,
+            .user_data.led2 = 0,
+            .user_data.led3 = 0,
+            .user_data.buffer = 0,
+            .user_data.stack[0] = 0,
+            .user_data.stack[1] = 0,
+        #endif
+        #ifdef BACKLIGHT_ENABLE
+            .backlight_level = 0,
+        #endif
     };
 
     visualizer_state_t state = {
@@ -318,6 +316,7 @@ static DECLARE_THREAD_FUNCTION(visualizerThread, arg) {
                 else {
                     gdispGSetPowerMode(LED_DISPLAY, powerOff);
                 }
+                state.status.backlight_level = current_status.backlight_level;
             }
     #endif
             if (visualizer_enabled) {

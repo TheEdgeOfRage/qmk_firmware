@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lcd_keyframes.h"
 #include "lcd_backlight_keyframes.h"
 #include "system/serial_link.h"
-#include "animations.h"
+#include "default_animations.h"
 
 #define STACK_SIZE 10
 
@@ -90,7 +90,7 @@ _Static_assert(sizeof(visualizer_user_data_t) <= VISUALIZER_USER_DATA_SIZE,
     /* .num_frames = 1, */
     /* .loop = false, */
     /* .frame_lengths = {gfxMillisecondsToTicks(0)}, */
-    /* .frame_functions = {backlight_keyframe_set_color}, */
+    /* .frame_functions = {lcd_backlight_keyframe_set_color}, */
 /* }; */
 
 bool swap_led_target_color(keyframe_animation_t* animation, visualizer_state_t* state) {
@@ -105,7 +105,7 @@ bool swap_led_target_color(keyframe_animation_t* animation, visualizer_state_t* 
     /* .num_frames = 2, */
     /* .loop = true, */
     /* .frame_lengths = {gfxMillisecondsToTicks(1000), gfxMillisecondsToTicks(0)}, */
-    /* .frame_functions = {backlight_keyframe_set_color, swap_led_target_color}, */
+    /* .frame_functions = {lcd_backlight_keyframe_set_color, swap_led_target_color}, */
 /* }; */
 
 // The LCD animation alternates between the layer name display and a
