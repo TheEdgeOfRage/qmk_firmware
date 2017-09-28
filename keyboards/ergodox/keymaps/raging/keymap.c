@@ -7,7 +7,9 @@
 #define FN 2 // function
 #define NUM 3 // numpad
 #define RPN 4 // numpad
+#define MAC 5 // numpad
 
+// RPN claculator macros
 #define C_INIT M(10) // Reset calculator to zero
 #define C_0 M(0) // Append number 0 to buffer
 #define C_1 M(1) // Append number 1 to buffer
@@ -27,6 +29,10 @@
 #define C_MUL M(16) // Multiply buffer and stack
 #define C_DIV M(17) // Divide stack and buffer
 
+// Programming macros
+#define JSCL 32 // js console.log()
+#define ARRW 33 // js () => {}
+
 #define _____ KC_TRNS
 #define XXXXX KC_NO
 
@@ -42,13 +48,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * |--------+------+------+------+------+------|   )  |           |   ]  |------+------+------+------+------+--------|
 	 * | LShift |   Z  |   X  |   C  |   V  |   B  |      |           |      |   K  |   M  |   ,  |   .  |   \  | RShift |
 	 * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-	 *   |  FN  |      |      |      | LGUI |                                       |   /  |      |      |      |      |
+	 *   |  FN  |      |      | LAlt | LMeta|                                       |   /  |      |      |      |      |
 	 *   `----------------------------------'                                       `----------------------------------'
 	 *                                        ,-------------.       ,-------------.
 	 *                                        |  Esc | SLck |       |  RPN |  NUM |
 	 *                                 ,------|------|------|       |------+------+------.
 	 *                                 |      |      | QWER |       | QWER |      |      |
-	 *                                 | Space| LAlt |------|       |------|  FN  | Enter|
+	 *                                 | Space|  FN  |------|       |------|  FN  | Enter|
 	 *                                 |      |      | Caps |       | PScr |      |      |
 	 *                                 `--------------------'       `--------------------'
 	 */
@@ -58,17 +64,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TAB,			KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,
 		KC_LCTL,		KC_A,		KC_R,		KC_S,		KC_T,		KC_D,
 		KC_LSFT,		KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_RPRN,
-		MO(FN),			XXXXX,		XXXXX,		XXXXX,		KC_LGUI,
+		MO(MAC),		XXXXX,		XXXXX,		KC_LALT,	KC_LGUI,
 																		KC_ESC,		KC_SLCK,
 																					TG(QWER),
-															KC_SPC,		KC_LALT,	KC_CAPS,
+																KC_SPC,	MO(FN),		KC_CAPS,
 
 		// right hand
-		KC_EQL,			KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,
-		KC_LBRC,		KC_J,		KC_L,		KC_U,		KC_Y,		KC_SCLN,	KC_QUOT,
-						KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
-		KC_RBRC,		KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
-									KC_SLSH,	XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		KC_EQL,			KC_6,		KC_7,		KC_8,			KC_9,		KC_0,		KC_MINS,
+		KC_LBRC,		KC_J,		KC_L,		KC_U,			KC_Y,		KC_SCLN,	KC_QUOT,
+						KC_H,		KC_N,		KC_E,			KC_I,		KC_O,		KC_ENT,
+		KC_RBRC,		KC_K,		KC_M,		KC_COMM,		KC_DOT,		KC_BSLS,	KC_RSFT,
+									KC_SLSH,	XXXXX,			XXXXX,		XXXXX,		MO(MAC),
 		TG(RPN),		TG(NUM),
 		TG(QWER),
 		KC_PSCR,		MO(FN),		KC_BSPC
@@ -122,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	 * ,--------------------------------------------------.           ,--------------------------------------------------.
 	 * |        |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |           |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |        |
 	 * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
-	 * |        | Mute | Vol- | Vol+ |      |      |      |           |      |      |      |      |      |      |        |
+	 * |        | Mute | Vol- | Vol+ |      |      |      |           |      |      | JSCL |      |      |      |        |
 	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
 	 * |        | Play | Prev | Next |      |      |------|           |------|   ←  |   ↓  |   ↑  |   →  |      |        |
 	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -151,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 		// right hand
 		KC_F7,			KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,		RESET,
-		XXXXX,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		DEBUG,
+		XXXXX,			XXXXX,		M(JSCL),	XXXXX,		XXXXX,		XXXXX,		DEBUG,
 						KC_LEFT,	KC_DOWN,	KC_UP,		KC_RGHT,	XXXXX,		XXXXX,
 		XXXXX,			KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END,		XXXXX,		XXXXX,
 									XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
@@ -245,6 +251,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_____,
 		_____,			_____,		C_POP
 	),
+
+	/* Keymap 5: Macros
+	 *
+	 * ,--------------------------------------------------.           ,--------------------------------------------------.
+	 * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+	 * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
+	 * |        |      |      |      |      |      |      |           |      |      | JSCL |      |      |      |        |
+	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+	 * |        | ARRW |      |      |      |      |------|           |------|      |      |      |      |      |        |
+	 * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
+	 * |        |      |      |      |      |      |      |           |      |      |      |      |      |      |        |
+	 * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
+	 *   |      |      |      |      |      |                                       |      |      |      |      |      |
+	 *   `----------------------------------'                                       `----------------------------------'
+	 *                                        ,-------------.       ,-------------.
+	 *                                        |      |      |       |      |      |
+	 *                                 ,------|------|------|       |------+------+------.
+	 *                                 |      |      |      |       |      |      |      |
+	 *                                 |      |      |------|       |------|      |      |
+	 *                                 |      |      |      |       |      |      |      |
+	 *                                 `--------------------'       `--------------------'
+	 */
+	[MAC] = KEYMAP(  // layer 5: Macros
+		// left hand
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
+		_____,			M(ARRW),	XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
+		_____,			_____,		_____,		_____,		_____,
+																		_____,		_____,
+																					_____,
+															_____,		_____,		_____,
+
+		// right hand
+		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		XXXXX,			XXXXX,		M(JSCL),	XXXXX,		XXXXX,		XXXXX,		XXXXX,
+						XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+		XXXXX,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
+									_____,		_____,		_____,		_____,		_____,
+		_____,			_____,
+		_____,
+		_____,			_____,		_____
+	),
 };
 
 /*const uint16_t PROGMEM fn_actions[] = {*/
@@ -327,33 +376,23 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 			if (record->event.pressed)
 				ergodox_calc_div();
 			break;
+		case JSCL:
+			if (record->event.pressed)
+				SEND_STRING("console.log(");
+			break;
+		case ARRW:
+			if (record->event.pressed)
+				SEND_STRING("() => {");
+			break;
 	}
 	return MACRO_NONE;
 };
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-	/* ergodox_calc_init(); */
 };
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
-	/* uint8_t layer = biton32(layer_state); */
-
-	/* switch (layer) { */
-		/* case 0: */
-			/* [> ergodox_led_all_on(); <] */
-		/* case 1: */
-			/* break; */
-		/* case 2: */
-			/* break; */
-		/* case 3: */
-			/* break; */
-		/* case 4: */
-			/* break; */
-		/* default: */
-			/* // none */
-			/* break; */
-	/* } */
 };
 
