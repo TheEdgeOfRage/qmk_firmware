@@ -1,6 +1,7 @@
-#include "ergodox.h"
+#include QMK_KEYBOARD_H
 /* #include "debug.h" */
 /* #include "action_layer.h" */
+/* #include "version.h" */
 
 #define BASE 0 // default layer
 #define QWER 1 // qwerty layout
