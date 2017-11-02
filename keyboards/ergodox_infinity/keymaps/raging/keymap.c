@@ -149,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		// left hand
 		RESET,			KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,
 		_____,			KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		_____,
-		_____,			KC_MPLY,	KC_MPRV,	KC_MNXT,	XXXXX,		XXXXX,
+		_____,			KC_MPLY,	KC_MPRV,	KC_MNXT,	KC_MS_BTN1,	KC_MS_BTN3,
 		_____,			XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
 		_____,			_____,		XXXXX,		XXXXX,		XXXXX,
 																		_____,		_____,
