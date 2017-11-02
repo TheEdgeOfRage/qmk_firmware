@@ -4,6 +4,7 @@
 *.eep
 *.elf
 *.hex
+*.qmk
 !util/bootloader.hex
 !quantum/tools/eeprom_reset.hex
 *.log
@@ -21,12 +22,20 @@ build/
 quantum/version.h
 .idea/
 CMakeLists.txt
+cmake-build-debug
 .DS_STORE
 /util/wsl_downloaded
 /util/win_downloaded
 /keyboards/*/Makefile
 /keyboards/*/*/Makefile
+/keyboards/*/*/*/Makefile
+/keyboards/*/*/*/*/Makefile
+/keyboards/*/*/*/*/*/Makefile
 /keyboards/*/keymaps/Makefile
+/keyboards/*/*/keymaps/Makefile
+/keyboards/*/*/*/keymaps/Makefile
+/keyboards/*/*/*/*/keymaps/Makefile
+/keyboards/*/*/*/*/*/keymaps/Makefile
 
 # Eclipse/PyCharm/Other IDE Settings
 .cproject
