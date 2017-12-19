@@ -3,8 +3,8 @@
 #define _COL 0 // default layer
 #define _QWE 1 // qwerty layout
 /* #define _NUM 2 // numpad */
-#define _FN 3 // function
-/* #define _RGB 4 // RGB */
+#define _FN 2 // function
+#define _RGB 3 // RGB
 
 #define _____ KC_TRNS
 #define XXXXX KC_NO
@@ -30,7 +30,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_TAB,		KC_Q,			KC_W,			KC_F,			KC_P,			KC_G,			KC_J,			KC_L,			KC_U,			KC_Y,			KC_SCLN,	KC_QUOT,
 		KC_LCTL,	KC_A,			KC_R,			KC_S,			KC_T,			KC_D,			KC_H,			KC_N,			KC_E,			KC_I,			KC_O,			KC_ENT,
 		KC_LSFT,	KC_Z,			KC_X,			KC_C,			KC_V,			KC_B,			KC_K,			KC_M,			KC_COMM,	KC_DOT,		KC_SLSH,	KC_RSFT,
-		TG(_QWE),	KC_ESC,		KC_LALT,	KC_LGUI,			KC_BSPC,							KC_SPC,				MO(_FN),	KC_PSCR,	XXXXX,		XXXXX
+		XXXXX,		KC_ESC,		KC_LALT,	KC_LGUI,			KC_BSPC,							KC_SPC,				MO(_FN),	KC_PSCR,	MO(_RGB),	_____
 	),
 
 	/* Keymap 1: QWERTY layer
@@ -99,16 +99,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_____,		KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		_____,
 		_____,		KC_MPLY,	KC_MPRV,	KC_MNXT,	XXXXX,		XXXXX,		KC_LEFT,	KC_DOWN,	KC_UP,		KC_RGHT,	XXXXX,		_____,
 		_____,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END,		XXXXX,		_____,
-		_____,	_____,		_____,		_____,				KC_DEL,							_____,					_____,		_____,		_____,		RESET
+		RESET,		_____,		_____,		_____,				KC_DEL,							_____,					_____,		_____,		RESET,		_____
 	),
 
-	/* [_RGB] = KEYMAP( */
-		/* _____,		RGB_HUI,	RGB_SAI,	RGB_VAI,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____, */
-		/* _____,		RGB_HUD,	RGB_SAD,	RGB_VAD,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____, */
-		/* _____,		RGB_TOG,	RGB_SMOD,	_____,		_____,		_____,							_____,		_____,		_____,		_____,		_____,		_____, */
-		/* _____,		RGB_M_P,	RGB_M_B,	RGB_M_R,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____, */
-		/* _____,		RGB_M_SW,	RGB_M_K,	RGB_M_G,			_____,					_____,				_____,					_____,		_____,		_____,		_____ */
-	/* ), */
+	[_RGB] = KEYMAP(
+		_____,		RGB_HUI,	RGB_SAI,	RGB_VAI,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,
+		_____,		RGB_HUD,	RGB_SAD,	RGB_VAD,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,
+		_____,		RGB_TOG,	RGB_SMOD,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,
+		_____,		RGB_M_P,	RGB_M_B,	RGB_M_R,	_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,
+		_____,		RGB_M_SW,	RGB_M_K,	RGB_M_G,			_____,							_____,					_____,		_____,		_____,		_____
+	),
 };
 
 void matrix_init_user(void) {
@@ -130,3 +130,4 @@ void matrix_scan_user(void) {
  * |        |     |     |     |           |     |           |     |     |     |        |
  * `--------------------------------------'     `--------------------------------------'
  */
+
