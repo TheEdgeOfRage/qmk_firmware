@@ -43,8 +43,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 */
 #define MATRIX_ROW_PINS { B4, E6, D3, F6, B2 }
-#define MATRIX_COL_PINS { D0, D7, D4, C6, B5, D1, F4, D2, F5, F7, B1, B3 }
+#define MATRIX_COL_PINS { D0, D7, D4, C6, B6, D1, F4, D2, F5, F7, B1, B3 }
 #define UNUSED_PINS
+
+#define RGB_DI_PIN B5
+#define RGBLED_NUM 16
 
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
