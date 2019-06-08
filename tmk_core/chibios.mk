@@ -197,6 +197,8 @@ endif
 
 DEBUG = gdb
 
+SERIAL = "mk20dx256vlh7"
+
 DFU_ARGS ?=
 ifneq ("$(SERIAL)","")
 	DFU_ARGS += -S $(SERIAL)

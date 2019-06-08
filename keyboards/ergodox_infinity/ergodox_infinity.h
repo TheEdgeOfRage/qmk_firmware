@@ -80,6 +80,18 @@ inline void ergodox_led_all_set(uint8_t n) {
     ergodox_right_led_3_set(n);
 }
 
+// Calculator functions
+void ergodox_calc_init(void);
+void ergodox_calc_append_number(uint8_t n);
+void ergodox_calc_push(void);
+void ergodox_calc_pop(void);
+void ergodox_calc_dot(void);
+void ergodox_calc_add(void);
+void ergodox_calc_sub(void);
+void ergodox_calc_mul(void);
+void ergodox_calc_div(void);
+void ergodox_calc_sqrt(void);
+
 /*
  *   LEFT HAND: LINES 88-95
  *  RIGHT HAND: LINES 97-104

@@ -16,6 +16,7 @@
 
 #include "lcd_keyframes.h"
 #include <string.h>
+#include <math.h>
 #include "action_util.h"
 #include "led.h"
 #include "resources/resources.h"
@@ -109,24 +110,24 @@ static void get_led_state_string(char* output, visualizer_state_t* state) {
     uint8_t pos = 0;
 
     if (state->status.leds & (1u << USB_LED_NUM_LOCK)) {
-       memcpy(output + pos, "NUM ", 4);
-       pos += 4;
+        memcpy(output + pos, "NUM ", 4);
+        pos += 4;
     }
     if (state->status.leds & (1u << USB_LED_CAPS_LOCK)) {
-       memcpy(output + pos, "CAPS ", 5);
-       pos += 5;
+        memcpy(output + pos, "CAPS ", 5);
+        pos += 5;
     }
     if (state->status.leds & (1u << USB_LED_SCROLL_LOCK)) {
-       memcpy(output + pos, "SCRL ", 5);
-       pos += 5;
+        memcpy(output + pos, "SCRL ", 5);
+        pos += 5;
     }
     if (state->status.leds & (1u << USB_LED_COMPOSE)) {
-       memcpy(output + pos, "COMP ", 5);
-       pos += 5;
+        memcpy(output + pos, "COMP ", 5);
+        pos += 5;
     }
     if (state->status.leds & (1u << USB_LED_KANA)) {
-       memcpy(output + pos, "KANA", 4);
-       pos += 4;
+        memcpy(output + pos, "KANA", 4);
+        pos += 4;
     }
     output[pos] = 0;
 }
@@ -186,3 +187,81 @@ bool lcd_keyframe_enable(keyframe_animation_t* animation, visualizer_state_t* st
     gdispSetPowerMode(powerOn);
     return false;
 }
+
+static void format_double_bitmap_string(double n, char* buffer) {
+	char *save = buffer; // Save pointer to the beginning of the string
+	bool neg = false;
+	if (n < 0) { // If number is negative, make it positive
+		n *= -1;
+		neg = true;
+	}
+
+	uint64_t i = roundf(n * 10000); // Round to a maximum of 4 decimal places
+	uint64_t f = i % 10000; // Save frraction to separate variable
+	bool frac = false; // Save if the fraction was 0
+	if (f != 0)
+		frac = true;
+	i /= 10000;
+
+	while (( (f % 10) == 0) && frac) { // Skip trailing zeros in fraction
+		f /= 10;
+	}
+	while (f != 0) { // Loop through fraction and add digits to the buffer
+		*buffer = (f % 10) + '0';
+		++buffer;
+		f /= 10;
+	}
+	if (frac && i == 0) { // Add '.0' if the integer is 0
+		*buffer = '.';
+		++buffer;
+		*buffer = '0';
+		++buffer;
+	} else if (frac) { // Add decimal point if the integer is not 0
+		*buffer = '.';
+		++buffer;
+	} else if (i == 0) { // If the fraction and integer are 0 write a 0 to the buffer and return
+		*buffer = '0';
+		++buffer;
+		*buffer = 0;
+		return;
+	}
+	while (i != 0) { // Loop through the integer and add digits to the buffer
+		*buffer = (i % 10) + '0';
+		++buffer;
+		i /= 10;
+	}
+	if (neg) { // If the number was negative add a '-'
+		*buffer = '-';
+		++buffer;
+	}
+	*buffer = 0;
+	--buffer;
+
+	while (save < buffer) { // Reverse number string
+		char tmp = *buffer;
+		*buffer = *save;
+		*save = tmp;
+		--buffer;
+		++save;
+	}
+}
+
+bool lcd_keyframe_display_rpn_stack(keyframe_animation_t* animation, visualizer_state_t* state) {
+    (void)animation;
+	char stack_buffer[32] = { 0 };
+    gdispClear(White);
+
+	format_double_bitmap_string(state->status.user_data.stack[0], stack_buffer);
+    gdispDrawString(0, 2, "Z: ", state->font_fixed5x8, Black);
+	gdispDrawString(15, 2, stack_buffer, state->font_fixed5x8, Black);
+
+	format_double_bitmap_string(state->status.user_data.stack[1], stack_buffer);
+    gdispDrawString(0, 12, "Y: ", state->font_fixed5x8, Black);
+	gdispDrawString(15, 12, stack_buffer, state->font_fixed5x8, Black);
+
+	format_double_bitmap_string(state->status.user_data.buffer, stack_buffer);
+    gdispDrawString(0, 22, "X: ", state->font_fixed5x8, Black);
+	gdispDrawString(15, 22, stack_buffer, state->font_fixed5x8, Black);
+    return false;
+}
+

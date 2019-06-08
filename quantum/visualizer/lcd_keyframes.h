@@ -35,5 +35,7 @@ bool lcd_keyframe_draw_logo(keyframe_animation_t* animation, visualizer_state_t*
 bool lcd_keyframe_disable(keyframe_animation_t* animation, visualizer_state_t* state);
 bool lcd_keyframe_enable(keyframe_animation_t* animation, visualizer_state_t* state);
 
+bool lcd_keyframe_display_rpn_stack(keyframe_animation_t* animation, visualizer_state_t* state);
+
 
 #endif /* QUANTUM_VISUALIZER_LCD_KEYFRAMES_H_ */

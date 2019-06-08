@@ -68,6 +68,15 @@ void draw_emulator(void);
 struct keyframe_animation_t;
 
 typedef struct {
+    uint8_t led_on;
+    uint8_t led1;
+    uint8_t led2;
+    uint8_t led3;
+    double buffer;
+    double stack[2];
+} visualizer_keyboad_user_data_t;
+
+typedef struct {
     uint32_t layer;
     uint32_t default_layer;
     uint32_t leds; // See led.h for available statuses
@@ -77,7 +86,7 @@ typedef struct {
     uint8_t backlight_level;
 #endif
 #ifdef VISUALIZER_USER_DATA_SIZE
-    uint8_t user_data[VISUALIZER_USER_DATA_SIZE];
+    visualizer_keyboad_user_data_t user_data;
 #endif
 } visualizer_keyboard_status_t;
 
@@ -97,6 +106,7 @@ typedef struct visualizer_state_t {
     uint32_t prev_lcd_color;
 #ifdef LCD_ENABLE
     font_t font_fixed5x8;
+    font_t font_fixed7x14;
     font_t font_dejavusansbold12;
 #endif
 } visualizer_state_t;
