@@ -53,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	* ├───────┼─────┼─────┼─────╄─────╃─────┤  )  │     │  ]  ├─────╄─────╃─────┼─────┼─────┼───────┤
 	* │ LSHFT │  Z  │  X  │  C  │  V  │  B  │     │     │     │  K  │  M  │  ,  │  .  │  \  │ RSHFT │
 	* └─┬─────┼─────┼─────┼─────┼─────┼─────┴─────┘     └─────┴─────┼─────┼─────┼─────┼─────┼─────┬─┘
-	*   │     │     │     │ LALT│ SPC │                             │  /  │     │     │     │     │
+	*   │     │     │     │ LALT│ SPC │                             │  /  │     │     │ APP │     │
 	*   └─────┴─────┴─────┴─────┴─────┘ ┌─────┬─────┐ ┌─────┬─────┐ └─────┴─────┴─────┴─────┴─────┘
 	*                                   │ ESC │     │ │     │ NUM │
 	*                             ┌─────┼─────┼─────┤ ├─────┼─────┼─────┐
@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_LBRC,	KC_J,		KC_L,		KC_U,		KC_Y,		KC_SCLN,	KC_QUOT,
 					KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
 		KC_RBRC,	KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
-								KC_SLSH,	XXXXX,		XXXXX,		XXXXX,		XXXXX,
+								KC_SLSH,	XXXXX,		XXXXX,		KC_APP,		XXXXX,
 		XXXXX,		TG(NUM),
 		TG(QWER),
 		KC_PSCR,	MO(FN),		KC_BSPC
