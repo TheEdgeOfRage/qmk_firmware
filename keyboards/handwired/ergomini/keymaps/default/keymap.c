@@ -53,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+-----+-----+-----+-----+-----|  )  |-----+-----+-----+-----+-----+--------|
      * | LShift |  Z  |  X  |  C  |  V  |  B  |     |  K  |  M  |  ,  |  .  |  \  | RShift |
      * |--------+-----+-----+-----+-----------+-----+-----------+-----+-----+-----+--------|
-     * | QWERTY | Esc | LAlt| i3  |   Space   | Fn  | Backspace |  /  |PtScr|     |  Num   |
+     * | QWERTY | Esc | LAlt| i3  |   Space   | Fn  | Backspace |  /  |PtScr|Menu |        |
      * `-----------------------------------------------------------------------------------'
      *
      */
@@ -62,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,		KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,	KC_J,		KC_L,		KC_U,		KC_Y,		KC_SCLN,	KC_QUOT,
         KC_LCTL,	KC_A,		KC_R,		KC_S,		KC_T,		KC_D,					KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
         KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_RPRN,	KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
-        TG(_QWER),	KC_ESC,		KC_LALT,	KC_LGUI,		KC_SPC,				MO(_FN),		KC_BSPC,			KC_SLSH,	KC_PSCR,	KC_APP,		TG(_NUM)
+        TG(_QWER),	KC_ESC,		KC_LALT,	KC_LGUI,		KC_SPC,				MO(_FN),		KC_BSPC,			KC_SLSH,	KC_PSCR,	KC_APP,		XXXXX
     ),
 
     /* Keymap 1: QWERTY layer
@@ -93,13 +93,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * ,-----------------------------------------------------------------------------------.
      * |        | F1  | F2  | F3  | F4  | F5  | F6  | F7  | F8  | F9  | F10 | F11 |  F12   |
      * |--------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+--------|
-     * |        |Mute |Vol- |Vol+ |     |     |     |     |     |     |     |     |        |
+     * |        |Mute |Vol- |Vol+ |     |     |  [  |  š  |     |     |     |  č  |   ć    |
      * |--------+-----+-----+-----+-----+-----|     |-----+-----+-----+-----+-----+--------|
-     * |        |Play |Prev |Next |     |     |-----|  ←  |  ↓  |  ↑  |  →  |     |        |
-     * |--------+-----+-----+-----+-----+-----|     |-----+-----+-----+-----+-----+--------|
-     * |        |     |     |     |     |     |     |Home |PgUp |PgDn | End |     |        |
+     * |        |Play |Prev |Next |User |Domai|-----|  ←  |  ↓  |  ↑  |  →  |  đ  |        |
+     * |--------+-----+-----+-----+-----+-----|  ]  |-----+-----+-----+-----+-----+--------|
+     * |        |Email|     |     |     |     |     |Home |PgUp |PgDn | End |  ž  |        |
      * |--------+-----+-----+-----+-----------+-----+-----------+-----+-----+-----+--------|
-     * |        |     |     |     |  Delete   |     |           |     |     |     |        |
+     * |        |     |     |     |  Delete   |     |           |     |     | RGB |        |
      * `-----------------------------------------------------------------------------------'
      *
      */
@@ -114,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Keymap 3: Numpad Layer
      *
      * ,-----------------------------------------------------------------------------------.
-     * |        |     |     |     |     |     |     |     |NMLCK|  /  |  *  |  -  |        |
+     * |        |     |     |     |     |     |     |     |NumLk|  /  |  *  |  -  |        |
      * |--------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+--------|
      * |        |     |     |     |     |     |     |     |  7  |  8  |  9  |  +  |        |
      * |--------+-----+-----+-----+-----+-----|     |-----+-----+-----+-----+-----+--------|
@@ -170,4 +170,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     return true;
 }
-
