@@ -1,5 +1,3 @@
-
-# MCU name
 MCU = atmega32u4
 
 # Processor frequency.
@@ -15,11 +13,6 @@ MCU = atmega32u4
 #     software delays.
 F_CPU = 16000000
 
-
-#
-# LUFA specific
-#
-# Target architecture (see library "Board Types" documentation).
 ARCH = AVR8
 
 # Input clock frequency.
@@ -38,25 +31,11 @@ F_USB = $(F_CPU)
 # Interrupt driven control endpoint task(+60)
 OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
 
-
-# Boot Section Size in *bytes*
-#   Teensy halfKay   512
-#   Teensy++ halfKay 1024
-#   Atmel DFU loader 4096
-#   LUFA bootloader  4096
-#   USBaspLoader     2048
-OPT_DEFS += -DBOOTLOADER_SIZE=512
-
-
-# Build Options
-#   change yes to no to disable
-#
 BOOTMAGIC_ENABLE ?= no       # Virtual DIP switch configuration(+1000)
 MOUSEKEY_ENABLE ?= yes       # Mouse keys(+4700)
 EXTRAKEY_ENABLE ?= yes       # Audio control and System control(+450)
 CONSOLE_ENABLE ?= no         # Console for debug(+400)
 COMMAND_ENABLE ?= no         # Commands for debug and configuration
-# Do not enable SLEEP_LED_ENABLE. it uses the same timer as BACKLIGHT_ENABLE
 SLEEP_LED_ENABLE ?= no       # Breathing sleep LED during USB suspend
 # if this doesn't work, see here: https://github.com/tmk/tmk_keyboard/wiki/FAQ#nkro-doesnt-work
 NKRO_ENABLE ?= yes           # USB Nkey Rollover
