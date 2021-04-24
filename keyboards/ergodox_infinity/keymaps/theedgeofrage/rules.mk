@@ -9,4 +9,3 @@ NKRO_ENABLE			?= yes	# USB Nkey Rollover - if this doesn't work, see here: https
 UNICODE_ENABLE		= no	# Unicode
 UNICODEMAP_ENABLE	?= yes	# Unicode table map
 ONEHAND_ENABLE		?= no	# Allow swapping hands of keyboard
-

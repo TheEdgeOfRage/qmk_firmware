@@ -2,13 +2,15 @@
 #include "action_layer.h"
 #include "version.h"
 
-#define BASE 0 // default layer
-#define QWER 1 // qwerty layout
-#define FN 2 // function
-#define NUM 3 // numpad
-
 #define _____ KC_TRNS
 #define XXXXX KC_NO
+
+enum layers {
+    COLEMAK,
+    QWERTY,
+    FUNCTION,
+    NUMPAD,
+};
 
 enum custom_keycodes {
 	M_EMAIL = SAFE_RANGE,
@@ -62,14 +64,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	*                             │     │     │ CAPS│ │ PSCR│     │     │
 	*                             └─────┴─────┴─────┘ └─────┴─────┴─────┘
 	*/
-	[BASE] = LAYOUT_ergodox(
+	[COLEMAK] = LAYOUT_ergodox(
 		KC_GRV,		KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_EQL,
 		KC_TAB,		KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,
 		KC_LCTL,	KC_A,		KC_R,		KC_S,		KC_T,		KC_D,
 		KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_RPRN,
 		XXXXX,		KC_ESC,		XXXXX,		KC_LALT,	KC_SPC,
 																	KC_ESC,		XXXXX,
-																				TG(QWER),
+																				TG(QWERTY),
 														KC_SPC,		KC_LGUI,	KC_CAPS,
 
 		KC_EQL,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,
@@ -77,9 +79,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 					KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
 		KC_RBRC,	KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
 								KC_SLSH,	XXXXX,		XXXXX,		KC_APP,		XXXXX,
-		XXXXX,		TG(NUM),
-		TG(QWER),
-		KC_PSCR,	MO(FN),		KC_BSPC
+		XXXXX,		TG(NUMPAD),
+		TG(QWERTY),
+		KC_PSCR,	MO(FUNCTION),KC_BSPC
 	),
 
 	/* Layer 1: QWERTY
@@ -101,7 +103,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	*                             │     │     │     │ │     │     │     │
 	*                             └─────┴─────┴─────┘ └─────┴─────┴─────┘
 	*/
-	[QWER] = LAYOUT_ergodox(
+	[QWERTY] = LAYOUT_ergodox(
 		_____,		_____,		_____,		_____,		_____,		_____,		_____,
 		_____,		KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		_____,
 		_____,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,
@@ -140,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	*                             │     │     │     │ │     │     │     │
 	*                             └─────┴─────┴─────┘ └─────┴─────┴─────┘
 	*/
-	[FN] = LAYOUT_ergodox(
+	[FUNCTION] = LAYOUT_ergodox(
 		RESET,		KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,
 		_____,		KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		XXXXX,
 		_____,		KC_MPLY,	KC_MPRV,	KC_MNXT,	M_USER,		M_HOST,
@@ -179,7 +181,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	*                             │     │     │     │ │     │     │     │
 	*                             └─────┴─────┴─────┘ └─────┴─────┴─────┘
 	*/
-	[NUM] = LAYOUT_ergodox(
+	[NUMPAD] = LAYOUT_ergodox(
 		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
 		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
 		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
@@ -224,4 +226,3 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 	return true;
 }
-
