@@ -157,7 +157,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch(keycode) {
             case M_EMAIL:
-                SEND_STRING("pavle.portic@tilda.center");
+                SEND_STRING("pavle.portic@theedgeofrage.com");
                 return false;
             case M_USER:
                 SEND_STRING("TheEdgeOfRage");
