@@ -13,6 +13,7 @@ enum custom_keycodes {
     M_EMAIL = SAFE_RANGE,
     M_USER,
     M_HOST,
+    M_ALTC,
 };
 
 enum unicode_names {
@@ -53,7 +54,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+-----+-----+-----+-----+-----|  )  |-----+-----+-----+-----+-----+--------|
      * | LShift |  Z  |  X  |  C  |  V  |  B  |     |  K  |  M  |  ,  |  .  |  \  | RShift |
      * |--------+-----+-----+-----+-----------+-----+-----------+-----+-----+-----+--------|
-     * | QWERTY | Esc | LAlt| i3  |   Space   | Fn  | Backspace |  /  |PtScr|Menu |        |
+     * | QWERTY | Esc | LAlt| i3  |   Space   | Fn  | Backspace |  /  |PtScr|Menu |AltCase |
      * `-----------------------------------------------------------------------------------'
      *
      */
@@ -62,7 +63,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,		KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,	KC_J,		KC_L,		KC_U,		KC_Y,		KC_SCLN,	KC_QUOT,
         KC_LCTL,	KC_A,		KC_R,		KC_S,		KC_T,		KC_D,					KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
         KC_LSFT,	KC_Z,		KC_X,		KC_C,		KC_V,		KC_B,		KC_RPRN,	KC_K,		KC_M,		KC_COMM,	KC_DOT,		KC_BSLS,	KC_RSFT,
-        TG(_QWER),	KC_ESC,		KC_LALT,	KC_LGUI,		KC_SPC,				MO(_FN),		KC_BSPC,			KC_SLSH,	KC_PSCR,	KC_APP,		TG(_NUM)
+        TG(_QWER),	KC_ESC,		KC_LALT,	KC_LGUI,		KC_SPC,				MO(_FN),		KC_BSPC,			KC_SLSH,	KC_PSCR,	KC_APP,		M_ALTC
     ),
 
     /* Keymap 1: QWERTY layer
@@ -154,6 +155,8 @@ void matrix_scan_user(void) {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    static bool capitalize;
+    static bool alternate;
     if (record->event.pressed) {
         switch(keycode) {
             case M_EMAIL:
@@ -165,6 +168,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             case M_HOST:
                 SEND_STRING("theedgeofrage.com");
                 return false;
+            case M_ALTC:
+                capitalize = false;
+                alternate = !alternate;
+                return false;
+        }
+
+        if (alternate && keycode >= KC_A && keycode <= KC_Z) {
+            if (capitalize)
+                register_code(KC_LSFT);
+
+            register_code(keycode);
+            unregister_code(keycode);
+
+            if (capitalize)
+                unregister_code(KC_LSFT);
+
+            capitalize = !capitalize;
+            return false;
         }
     }
 
