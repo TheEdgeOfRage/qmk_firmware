@@ -1,10 +1,9 @@
-#include "ergomini.h"
+#include QMK_KEYBOARD_H
 
 #define _BASE 0 // default layer
 #define _QWER 1 // qwerty layout
 #define _FN 2 // function
-#define _NUM 3 // numpad
-#define _RGB 4 // RGB
+#define _RGB 3 // RGB
 
 #define _____ KC_TRNS
 #define XXXXX KC_NO
@@ -58,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      *
      */
-    [_BASE] = LAYOUT_ergomini(
+    [_BASE] = LAYOUT_ortho_5x13(
         KC_GRV,		KC_1,		KC_2,		KC_3,		KC_4,		KC_5,		KC_EQL,		KC_6,		KC_7,		KC_8,		KC_9,		KC_0,		KC_MINS,
         KC_TAB,		KC_Q,		KC_W,		KC_F,		KC_P,		KC_G,		KC_LPRN,	KC_J,		KC_L,		KC_U,		KC_Y,		KC_SCLN,	KC_QUOT,
         KC_LCTL,	KC_A,		KC_R,		KC_S,		KC_T,		KC_D,					KC_H,		KC_N,		KC_E,		KC_I,		KC_O,		KC_ENT,
@@ -81,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      *
      */
-    [_QWER] = LAYOUT_ergomini(
+    [_QWER] = LAYOUT_ortho_5x13(
         _____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,
         _____,		KC_Q,		KC_W,		KC_E,		KC_R,		KC_T,		_____,		KC_Y,		KC_U,		KC_I,		KC_O,		KC_P,		_____,
         _____,		KC_A,		KC_S,		KC_D,		KC_F,		KC_G,					KC_H,		KC_J,		KC_K,		KC_L,		KC_SCLN,	_____,
@@ -104,39 +103,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * `-----------------------------------------------------------------------------------'
      *
      */
-    [_FN] = LAYOUT_ergomini(
-        RESET,		KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,		KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,
+    [_FN] = LAYOUT_ortho_5x13(
+        QK_BOOT,	KC_F1,		KC_F2,		KC_F3,		KC_F4,		KC_F5,		KC_F6,		KC_F7,		KC_F8,		KC_F9,		KC_F10,		KC_F11,		KC_F12,
         _____,		KC_MUTE,	KC_VOLD,	KC_VOLU,	XXXXX,		XXXXX,		KC_LBRC,	XP(LSH, USH),XXXXX,		XXXXX,		XXXXX,		XP(LCH, UCH),XP(LCJ, UCJ),
         _____,		KC_MPLY,	KC_MPRV,	KC_MNXT,	M_USER,		M_HOST,					KC_LEFT,	KC_DOWN,	KC_UP,		KC_RGHT,	XP(LDJ, UDJ),_____,
         _____,		M_EMAIL,	XXXXX,		XXXXX,		XXXXX,		XXXXX,		KC_RBRC,	KC_HOME,	KC_PGDN,	KC_PGUP,	KC_END,		XP(LZH, UZH),_____,
         XXXXX,		_____,		_____,		_____,			KC_DEL,				_____,			_____,				_____,		_____,		TG(_RGB),	XXXXX
     ),
 
-    /* Keymap 3: Numpad Layer
-     *
-     * ,-----------------------------------------------------------------------------------.
-     * |        |     |     |     |     |     |     |     |NumLk|  /  |  *  |  -  |        |
-     * |--------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+--------|
-     * |        |     |     |     |     |     |     |     |  7  |  8  |  9  |  +  |        |
-     * |--------+-----+-----+-----+-----+-----|     |-----+-----+-----+-----+-----+--------|
-     * |        |     |     |     |     |     |-----|     |  4  |  5  |  6  |  +  |        |
-     * |--------+-----+-----+-----+-----+-----|     |-----+-----+-----+-----+-----+--------|
-     * |        |     |     |     |     |     |     |     |  1  |  2  |  3  | ENT |        |
-     * |--------+-----+-----+-----+-----------+-----+-----------+-----+-----+-----+--------|
-     * |        |     |     |     |           |     |     0     |  0  |  .  | ENT |        |
-     * `-----------------------------------------------------------------------------------'
-     *
-     */
-    [_NUM] = LAYOUT_ergomini(
-        _____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		KC_NLCK,	KC_PSLS,	KC_PAST,	KC_PMNS,	_____,
-        _____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		KC_P7,		KC_P8,		KC_P9,		KC_PPLS,	_____,
-        _____,		_____,		_____,		_____,		_____,		_____,					_____,		KC_P4,		KC_P5,		KC_P6,		KC_PPLS,	_____,
-        _____,		_____,		_____,		_____,		_____,		_____,		_____,		_____,		KC_P1,		KC_P2,		KC_P3,		KC_ENT,		_____,
-        _____,		_____,		_____,		_____,			_____,				_____,			KC_P0,				KC_P0,		KC_PDOT,	KC_ENT,		_____
-    ),
-
     /* Keymap 4: RGB Layer */
-    [_RGB] = LAYOUT_ergomini(
+    [_RGB] = LAYOUT_ortho_5x13(
         XXXXX,		RGB_HUI,	RGB_SAI,	RGB_VAI,	XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
         XXXXX,		RGB_HUD,	RGB_SAD,	RGB_VAD,	XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
         XXXXX,		RGB_TOG,	RGB_MOD,	XXXXX,		XXXXX,		XXXXX,					XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,		XXXXX,
@@ -147,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-    set_unicode_input_mode(UC_LNX);
+    set_unicode_input_mode(UNICODE_MODE_LINUX);
 };
 
 // Runs constantly in the background, in a loop.

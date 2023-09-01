@@ -1,4 +1,4 @@
-#include "ergomini.h"
+#include "quantum.h"
 
 void matrix_init_kb(void) {
     // put your keyboard start-up code here
