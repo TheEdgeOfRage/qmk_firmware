@@ -56,7 +56,7 @@
     },
     "processor": "atmega32u4",
     "bootloader": "halfkay",
-    "debounce": 10,
+    "debounce": 35,
     "tapping": {
         "toggle": 1
     },
