@@ -11,11 +11,11 @@ enum my_layers {
 #define FN      MO(_FN)
 #define CTRL    LCTL_T(KC_ESC)
 
-// #define XZH XP(LZH, UZH)
-// #define XSH XP(LSH, USH)
-// #define XDJ XP(LDJ, UDJ)
-// #define XCH XP(LCH, UCH)
-// #define XCJ XP(LCJ, UCJ)
+#define XSH UP(LSH, USH)
+#define XDJ UP(LDJ, UDJ)
+#define XCJ UP(LCJ, UCJ)
+#define XCH UP(LCH, UCH)
+#define XZH UP(LZH, UZH)
 
 enum custom_keycodes {
     M_EMAIL = SAFE_RANGE,
@@ -84,20 +84,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                              KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, QK_BOOT,                            KC_EQL,  KC_LBRC, KC_RBRC, UP(LZH, UZH),     XXXXXXX,     XXXXXXX,
+     _______, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, QK_BOOT,                            KC_EQL,  KC_LBRC, KC_RBRC, XDJ,     XCH,     XCJ,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, KC_MPLY, KC_MPRV, KC_MNXT, M_USER,  M_HOST,                             KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, XXXXXXX,     XXXXXXX,
+     _______, KC_MPLY, KC_MPRV, KC_MNXT, M_USER,  M_HOST,                             KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, XSH,     XXXXXXX,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______, M_EMAIL, RGB_TOG, M_ALTC,  QWERTY,  XXXXXXX, _______,          _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  XXXXXXX, _______,
+     _______, M_EMAIL, RGB_TOG, M_ALTC,  QWERTY,  UC_NEXT, _______,          _______, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  XZH,     _______,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, KC_DEL,                    _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   )
 };
 // Runs just one time when the keyboard initializes.
-void matrix_init_user(void) {
-    set_unicode_input_mode(UNICODE_MODE_LINUX);
-};
+// void matrix_init_user(void) {
+// };
 
 // Runs constantly in the background, in a loop.
 // void matrix_scan_user(void) {
